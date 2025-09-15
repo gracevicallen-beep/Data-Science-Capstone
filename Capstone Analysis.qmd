@@ -15,7 +15,7 @@ editor:
     wrap: 72
 ---
 
-## Slides 
+## Slides
 
 Slides: [slides.html](slides.html){target="_blank"} ( our slides html
 link will go here)
