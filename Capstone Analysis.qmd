@@ -10,15 +10,14 @@ output-dir: report1      # Folder where rendered HTML will go
 execute: 
   warning: false
   message: false
+css: styles.css 
 course: "Capstone Projects in Data Science"
 editor:
   markdown: 
     wrap: 72
 ---
 
-<<<<<<< HEAD
-=======
-## Slides 
+## Slides
 
 Slides: [slides.html](slides.html){target="_blank"} ( our slides html
 link will go here)
@@ -55,9 +54,13 @@ learning [@adams2021topology]
 For Symbolic Regression [@wang2019symbolic] *This is my work and I want
 to add more work...*
 
-Cite new paper [@su2012linear]
-Miller (2025) investigates GAMs for identifying fraudulent financial statements, often hidden in complex accounting data. GAMs, combined with models like random forests, detect irregular revenue patterns and generate interpretable visualizations for auditors. Although effective, GAMs may miss sophisticated frauds involving multiple interacting factors. They provide a strong balance of accuracy and clarity for early detection of financial fraud.
-## Methods
+Cite new paper [@su2012linear] Miller (2025) investigates GAMs for
+identifying fraudulent financial statements, often hidden in complex
+accounting data. GAMs, combined with models like random forests, detect
+irregular revenue patterns and generate interpretable visualizations for
+auditors. Although effective, GAMs may miss sophisticated frauds
+involving multiple interacting factors. They provide a strong balance of
+accuracy and clarity for early detection of financial fraud. \## Methods
 
 -   Detail the models or algorithms used.
 
@@ -84,7 +87,6 @@ $$
 y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i
 $$
 
->>>>>>> 443e1c83be954119d50dd372ec86c141fcea9452
 ## Analysis and Results
 
 ### Data Exploration and Visualization
