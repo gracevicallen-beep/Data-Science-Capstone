@@ -3180,7 +3180,19 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="styles.css">
+<style type="text/css">body {
+background-color: #afc6c6;
+font-family: "Helvetica Neue", sans-serif;
+}
+h2, h3 {
+color: #232828;
+background: none !important;
+border: none !important;
+box-shadow: none !important;
+padding: 0 !important;
+margin: 1em 0 0.5em 0; 
+}
+</style>
 </head>
 
 <body class="fullcontent">
@@ -3228,14 +3240,15 @@ window.Quarto = {
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Generalized additive models (GAMs) have emerged as a powerful extension of generalized linear models (GLMs), providing a flexible framework for modeling nonlinear relationships while maintaining interpretability. First introduced by Hastie and Tibshirani (1986), GAMs replace the linear predictor in GLMs with an additive combination of smooth functions of covariates.</p>
-<p>Formally, a GAM can be expressed as:</p>
-<p><span class="math display">\[
-g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p)
-\]</span></p>
-<p>where <span class="math inline">\(g(\mu)\)</span> is the link function (e.g., logit for binary outcomes or identity for continuous outcomes), <span class="math inline">\(\alpha\)</span> is the intercept, and <span class="math inline">\(s_j(X_j)\)</span> are smooth functions of the predictor variables <span class="math inline">\(X_j\)</span>. This structure allows each predictor to contribute a smoothed effect to the model, capturing complex patterns in the data without obscuring the individual influence of each variable. By balancing flexibility and clarity, GAMs offer a practical alternative to fully nonparametric methods, which can become computationally intensive and difficult to interpret. The additive smooth functions <span class="math inline">\(s_j(X_j)\)</span> are at the heart of GAMs, enabling the model to uncover nonlinear patterns while maintaining interpretability for each predictor.</p>
 <p>Since their introduction, GAMs have been widely applied across diverse fields. Early ecological research highlighted their ability to model species–environment relationships, capturing nonlinear associations more effectively than traditional linear models (Guisan, Edwards, &amp; Hastie, 2002). Wood (2025) provides a comprehensive overview of GAM methodology, detailing their computational foundations, approaches to smoothing parameter estimation, and extensions to more complex modeling tasks such as location–scale modeling and quantile regression. More recent work has incorporated Bayesian perspectives, showing how smoothing penalties and shrinkage can be interpreted as priors, enhancing model selection and uncertainty estimation (Miller, 2025). These methodological developments underscore GAMs’ versatility as both a rigorous and interpretable statistical tool.</p>
 <p>Practical applications further illustrate the adaptability of GAMs. For example, GAMs have been used in finance to detect patterns indicative of fraud, balancing predictive performance with interpretability in datasets where transparency is critical (Tragouda et al., 2024; Miller, 2025). Similar approaches have been applied in healthcare to identify unusual billing patterns and in networked data through graph neural additive networks, which combine the interpretability of GAMs with the representational power of neural networks. Across these examples, GAMs consistently provide insight into complex, nonlinear relationships while retaining the ability to explain results to stakeholders.</p>
 <p>Building on this foundation, our project applies GAMs to the Fraud Detection Transactions Dataset from Kaggle (Ashar, 2023), a synthetic but realistic dataset designed to simulate patterns of financial fraud. Using RStudio and the <strong>mgcv</strong> package, we will conduct a series of GAM analyses to identify which variables within the dataset serve as significant indicators of fraud. This approach allows us to explore GAM methodology in practice, evaluating both model performance and interpretability while gaining hands-on experience with smoothing, variable selection, and visualization techniques in a real-world-style dataset.</p>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<p>Formally, a GAM can be expressed as:</p>
+<p><span class="math display">\[ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) \]</span></p>
+<p>where <span class="math inline">\(g(\mu)\)</span> is the link function (e.g., logit for binary outcomes or identity for continuous outcomes), <span class="math inline">\(\alpha\)</span> is the intercept, and <span class="math inline">\(s_j(X_j)\)</span> are smooth functions of the predictor variables <span class="math inline">\(X_j\)</span>. This structure allows each predictor to contribute a smoothed effect to the model, capturing complex patterns in the data without obscuring the individual influence of each variable. By balancing flexibility and clarity, GAMs offer a practical alternative to fully nonparametric methods, which can become computationally intensive and difficult to interpret. The additive smooth functions <span class="math inline">\(s_j(X_j)\)</span> are at the heart of GAMs, enabling the model to uncover nonlinear patterns while maintaining interpretability for each predictor.</p>
 </section>
 <section id="analysis-and-results" class="level2">
 <h2 class="anchored" data-anchor-id="analysis-and-results">Analysis and Results</h2>
