@@ -32,24 +32,6 @@ First introduced by Hastie and Tibshirani (1986), GAMs replace the
 linear predictor in GLMs with an additive combination of smooth
 functions of covariates.
 
-Formally, a GAM can be expressed as:
-
-$$
-g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p)
-$$
-
-where $g(\mu)$ is the link function (e.g., logit for binary outcomes or
-identity for continuous outcomes), $\alpha$ is the intercept, and
-$s_j(X_j)$ are smooth functions of the predictor variables $X_j$. This
-structure allows each predictor to contribute a smoothed effect to the
-model, capturing complex patterns in the data without obscuring the
-individual influence of each variable. By balancing flexibility and
-clarity, GAMs offer a practical alternative to fully nonparametric
-methods, which can become computationally intensive and difficult to
-interpret. The additive smooth functions $s_j(X_j)$ are at the heart of
-GAMs, enabling the model to uncover nonlinear patterns while maintaining
-interpretability for each predictor.
-
 Since their introduction, GAMs have been widely applied across diverse
 fields. Early ecological research highlighted their ability to model
 species–environment relationships, capturing nonlinear associations more
@@ -85,6 +67,24 @@ methodology in practice, evaluating both model performance and
 interpretability while gaining hands-on experience with smoothing,
 variable selection, and visualization techniques in a real-world-style
 dataset.
+
+## Methods
+
+Formally, a GAM can be expressed as:
+
+$$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
+
+where $g(\mu)$ is the link function (e.g., logit for binary outcomes or
+identity for continuous outcomes), $\alpha$ is the intercept, and
+$s_j(X_j)$ are smooth functions of the predictor variables $X_j$. This
+structure allows each predictor to contribute a smoothed effect to the
+model, capturing complex patterns in the data without obscuring the
+individual influence of each variable. By balancing flexibility and
+clarity, GAMs offer a practical alternative to fully nonparametric
+methods, which can become computationally intensive and difficult to
+interpret. The additive smooth functions $s_j(X_j)$ are at the heart of
+GAMs, enabling the model to uncover nonlinear patterns while maintaining
+interpretability for each predictor.
 
 ## Analysis and Results
 
