@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou">
 
 <title>GAM Fraud Analysis</title>
 <style>
@@ -3198,6 +3199,12 @@ window.Quarto = {
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou </p>
+          </div>
+  </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
@@ -3220,54 +3227,43 @@ window.Quarto = {
 </section>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>The introduction should:</p>
-<ul>
-<li><p>Develop a storyline that captures attention and maintains interest.</p></li>
-<li><p>Your audience is your peers</p></li>
-<li><p>Clearly state the problem or question you’re addressing.</p></li>
-</ul>
-<!-- -->
-<ul>
-<li><p>Introduce why it is relevant needs.</p></li>
-<li><p>Provide an overview of your approach.</p></li>
-</ul>
-<p>Example of writing including citing references:</p>
-<p><em>This is an introduction to ….. regression, which is a non-parametric estimator that estimates the conditional expectation of two variables which is random. The goal of a kernel regression is to discover the non-linear relationship between two random variables. To discover the non-linear relationship, kernel estimator or kernel smoothing is the main method to estimate the curve for non-parametric statistics. In kernel estimator, weight function is known as kernel function <span class="citation" data-cites="efr2008">[@efr2008]</span>. Cite this paper <span class="citation" data-cites="bro2014principal">[@bro2014principal]</span>. The GEE <span class="citation" data-cites="wang2014">[@wang2014]</span>. The PCA <span class="citation" data-cites="daffertshofer2004pca">[@daffertshofer2004pca]</span></em>. Topology can be used in machine learning <span class="citation" data-cites="adams2021topology">[@adams2021topology]</span></p>
-<p>For Symbolic Regression <span class="citation" data-cites="wang2019symbolic">[@wang2019symbolic]</span> <em>This is my work and I want to add more work…</em></p>
-<p>Cite new paper <span class="citation" data-cites="su2012linear">[@su2012linear]</span> Miller (2025) investigates GAMs for identifying fraudulent financial statements, often hidden in complex accounting data. GAMs, combined with models like random forests, detect irregular revenue patterns and generate interpretable visualizations for auditors. Although effective, GAMs may miss sophisticated frauds involving multiple interacting factors. They provide a strong balance of accuracy and clarity for early detection of financial fraud. ## Methods</p>
-<ul>
-<li><p>Detail the models or algorithms used.</p></li>
-<li><p>Justify your choices based on the problem and data.</p></li>
-</ul>
-<p><em>The common non-parametric regression model is</em> <span class="math inline">\(Y_i = m(X_i) + \varepsilon_i\)</span><em>, where</em> <span class="math inline">\(Y_i\)</span> <em>can be defined as the sum of the regression function value</em> <span class="math inline">\(m(x)\)</span> <em>for</em> <span class="math inline">\(X_i\)</span><em>. Here</em> <span class="math inline">\(m(x)\)</span> <em>is unknown and</em> <span class="math inline">\(\varepsilon_i\)</span> <em>some errors. With the help of this definition, we can create the estimation for local averaging i.e.</em> <span class="math inline">\(m(x)\)</span> <em>can be estimated with the product of</em> <span class="math inline">\(Y_i\)</span> <em>average and</em> <span class="math inline">\(X_i\)</span> <em>is near to</em> <span class="math inline">\(x\)</span><em>. In other words, this means that we are discovering the line through the data points with the help of surrounding data points. The estimation formula is printed below <span class="citation" data-cites="R-base">[@R-base]</span>:</em></p>
+<p>Generalized additive models (GAMs) have emerged as a powerful extension of generalized linear models (GLMs), providing a flexible framework for modeling nonlinear relationships while maintaining interpretability. First introduced by Hastie and Tibshirani (1986), GAMs replace the linear predictor in GLMs with an additive combination of smooth functions of covariates.</p>
+<p>Formally, a GAM can be expressed as:</p>
 <p><span class="math display">\[
-M_n(x) = \sum_{i=1}^{n} W_n (X_i) Y_i  \tag{1}
-\]</span><span class="math inline">\(W_n(x)\)</span> <em>is the sum of weights that belongs to all real numbers. Weights are positive numbers and small if</em> <span class="math inline">\(X_i\)</span> <em>is far from</em> <span class="math inline">\(x\)</span><em>.</em></p>
-<p><em>Another equation:</em></p>
-<p><span class="math display">\[
-y_i = \beta_0 + \beta_1 X_1 +\varepsilon_i
+g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p)
 \]</span></p>
+<p>where <span class="math inline">\(g(\mu)\)</span> is the link function (e.g., logit for binary outcomes or identity for continuous outcomes), <span class="math inline">\(\alpha\)</span> is the intercept, and <span class="math inline">\(s_j(X_j)\)</span> are smooth functions of the predictor variables <span class="math inline">\(X_j\)</span>. This structure allows each predictor to contribute a smoothed effect to the model, capturing complex patterns in the data without obscuring the individual influence of each variable. By balancing flexibility and clarity, GAMs offer a practical alternative to fully nonparametric methods, which can become computationally intensive and difficult to interpret. The additive smooth functions <span class="math inline">\(s_j(X_j)\)</span> are at the heart of GAMs, enabling the model to uncover nonlinear patterns while maintaining interpretability for each predictor.</p>
+<p>Since their introduction, GAMs have been widely applied across diverse fields. Early ecological research highlighted their ability to model species–environment relationships, capturing nonlinear associations more effectively than traditional linear models (Guisan, Edwards, &amp; Hastie, 2002). Wood (2025) provides a comprehensive overview of GAM methodology, detailing their computational foundations, approaches to smoothing parameter estimation, and extensions to more complex modeling tasks such as location–scale modeling and quantile regression. More recent work has incorporated Bayesian perspectives, showing how smoothing penalties and shrinkage can be interpreted as priors, enhancing model selection and uncertainty estimation (Miller, 2025). These methodological developments underscore GAMs’ versatility as both a rigorous and interpretable statistical tool.</p>
+<p>Practical applications further illustrate the adaptability of GAMs. For example, GAMs have been used in finance to detect patterns indicative of fraud, balancing predictive performance with interpretability in datasets where transparency is critical (Tragouda et al., 2024; Miller, 2025). Similar approaches have been applied in healthcare to identify unusual billing patterns and in networked data through graph neural additive networks, which combine the interpretability of GAMs with the representational power of neural networks. Across these examples, GAMs consistently provide insight into complex, nonlinear relationships while retaining the ability to explain results to stakeholders.</p>
+<p>Building on this foundation, our project applies GAMs to the Fraud Detection Transactions Dataset from Kaggle (Ashar, 2023), a synthetic but realistic dataset designed to simulate patterns of financial fraud. Using RStudio and the <strong>mgcv</strong> package, we will conduct a series of GAM analyses to identify which variables within the dataset serve as significant indicators of fraud. This approach allows us to explore GAM methodology in practice, evaluating both model performance and interpretability while gaining hands-on experience with smoothing, variable selection, and visualization techniques in a real-world-style dataset.</p>
 </section>
 <section id="analysis-and-results" class="level2">
 <h2 class="anchored" data-anchor-id="analysis-and-results">Analysis and Results</h2>
 <section id="data-exploration-and-visualization" class="level3">
 <h3 class="anchored" data-anchor-id="data-exploration-and-visualization">Data Exploration and Visualization</h3>
-<ul>
-<li><p>Describe your data sources and collection process.</p></li>
-<li><p>Present initial findings and insights through visualizations.</p></li>
-<li><p>Highlight unexpected patterns or anomalies.</p></li>
-</ul>
-<p>A study was conducted to determine how…</p>
 </section>
 <section id="modeling-and-results" class="level3">
 <h3 class="anchored" data-anchor-id="modeling-and-results">Modeling and Results</h3>
-<ul>
-<li><p>Explain your data pre-processing and cleaning steps.</p></li>
-<li><p>Present your key findings in a clear and concise manner.</p></li>
-<li><p>Use visuals to support your claims.</p></li>
-<li><p>Tell a story about what the data reveals.</p></li>
-</ul>
 </section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<p>Ashar, S. (2024). Fraud Detection Transactions Dataset. Kaggle. <a href="https://www.kaggle.com/datasets/samayashar/fraud-detection-transactions-dataset" class="uri">https://www.kaggle.com/datasets/samayashar/fraud-detection-transactions-dataset</a></p>
+<p>Agarwal, R., Melnick, L., Frosst, N., Zhang, X., Lengerich, B., Caruana, R., &amp; Hinton, G. E. (2021). Neural additive models: Interpretable machine learning with neural nets. arXiv preprint arXiv:2004.13912. <a href="https://arxiv.org/abs/2004.13912" class="uri">https://arxiv.org/abs/2004.13912</a> </p>
+<p>Tragouda, K., Papadopoulos, T., &amp; Stefanou, A. (2024). Identification of fraudulent financial statements through a multi-label classification approach. Intelligent Systems in Accounting, Finance and Management. Advance online publication. <a href="https://doi.org/10.1002/isaf.225" class="uri">https://doi.org/10.1002/isaf.225</a> </p>
+<p>Miller, D. L. (2025). Gam model – Fraud detection in darknet markets using generalized additive models. Figshare. <a href="https://doi.org/10.6084/m9.figshare.28618408" class="uri">https://doi.org/10.6084/m9.figshare.28618408</a> </p>
+<p>Hanagandi, S., Dhar, M., &amp; Buescher, D. (2023). Enhancing credit card fraud detection with regularized generalized linear models: A comparative analysis of down-sampling and up-sampling techniques. International Journal of Innovative Science and Research Technology, 8(9), 1533–1539. </p>
+<p>Brossart, D. F., Clay, D. L., &amp; Willson, V. (2015). Detecting contaminated birthdates using generalized additive models. BMC Bioinformatics, 16(185), 1–9. <a href="https://doi.org/10.1186/s12859-015-0636-0" class="uri">https://doi.org/10.1186/s12859-015-0636-0</a> </p>
+<p>Xie, H., Wu, Y., Zhang, C., &amp; He, X. (2022). Graph neural additive networks for fraud detection in networked data. IEEE Transactions on Knowledge and Data Engineering. <a href="https://doi.org/10.1109/TKDE.2022.3156235" class="uri">https://doi.org/10.1109/TKDE.2022.3156235</a></p>
+<p>Detmer, A. R. (2025). Evaluating the robustness of generalized additive models as a threshold‐detection tool. Ecosphere, 16(3), e70117. <a href="https://doi.org/10.1002/ecs2.70117" class="uri">https://doi.org/10.1002/ecs2.70117</a></p>
+<p>Guisan, A., Edwards, T. C., &amp; Hastie, T. (2002). Generalized linear and generalized additive models in studies of species distributions: Setting the scene. Ecological Modelling, 157(2–3), 89–100. <a href="https://doi.org/10.1016/S0304-3800(02)00204-1" class="uri">https://doi.org/10.1016/S0304-3800(02)00204-1</a> </p>
+<p>White, L. F., Jiang, W., Ma, Y., So-Armah, K., Samet, J. H., &amp; Cheng, D. M. (2020). Tutorial in Biostatistics: The use of generalized additive models to evaluate alcohol consumption as an exposure variable. Drug and alcohol dependence, 209, 107944. <a href="https://doi.org/10.1016/j.drugalcdep.2020.107944" class="uri">https://doi.org/10.1016/j.drugalcdep.2020.107944</a> </p>
+<p>Miller, D. L. (2025). Bayesian views of generalized additive modelling. Methods in Ecology and Evolution, 16, 446–455. <a href="https://doi.org/10.1111/2041-210X.14498" class="uri">https://doi.org/10.1111/2041-210X.14498</a> </p>
+<p>Wood, S. N. (2025). Generalized additive models. Annual Review of Statistics and Its Application, 12, 497–526. <a href="https://www.annualreviews.org/content/journals/10.1146/annurev-statistics-112723-034249">https://www.annualreviews.org/content/journals/10. 1146/annurev-statistics-112723-034249</a></p>
+<p>Hastie, T., &amp; Tibshirani, R. (1986). Generalized Additive Models. Statistical Science, 1(3), 297–310. <a href="http://www.jstor.org/stable/2245459" class="uri">http://www.jstor.org/stable/2245459</a></p>
 </section>
 
 </main>
