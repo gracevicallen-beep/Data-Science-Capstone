@@ -3,22 +3,6 @@ body {
   font-family: "Helvetica Neue", sans-serif;
 }
 
-div.references {
-    background-color: #afc6c6;  /* match your page background */
-    margin: 0;                    /* remove extra margin from div */
-    padding: 0;                   /* remove any padding */
-}
-/* Remove top/bottom margin from heading inside References */
-div.references h1,
-div.references h2 {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-div.references li {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
 h2, h3 {
   color: #232828;
   background: none !important;
@@ -26,4 +10,24 @@ h2, h3 {
   box-shadow: none !important;
   padding: 0 !important;
   margin: 1em 0 0.5em 0; /* standard spacing */
+}
+
+/* Remove extra spacing around the References section */
+div.references,
+div.references > h1,
+div.references > h2,
+div.references ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* References background */
+div.references {
+    background-color: #afc6c6;
+}
+
+/* List items inside References */
+div.references li {
+    margin: 0;
+    padding: 0;
 }
