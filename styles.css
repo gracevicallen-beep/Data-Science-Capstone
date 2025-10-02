@@ -5,8 +5,6 @@ body {
 
 div.references {
     background-color: #afc6c6;  /* match your page background */
-    padding: 1em;               /* optional: add some padding */
-    border-radius: 8px;         /* optional: rounded corners */
 }
 
 h2, h3 {
