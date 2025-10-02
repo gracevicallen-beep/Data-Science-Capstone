@@ -12,22 +12,24 @@ h2, h3 {
   margin: 1em 0 0.5em 0; /* standard spacing */
 }
 
-/* Remove extra spacing around the References section */
-div.references,
-div.references > h1,
-div.references > h2,
-div.references ul {
-    margin: 0;
-    padding: 0;
+/* Target the outer appendix container and inner references */
+#quarto-appendix,
+#quarto-appendix section.quarto-appendix-contents,
+#quarto-appendix section.quarto-appendix-contents h2,
+#refs.references,
+#refs.references * {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #afc6c6 !important; /* same as page */
 }
 
-/* References background */
-div.references {
-    background-color: #afc6c6;
+/* Optional: remove hanging indent spacing if you want flush references */
+#refs.references {
+    text-indent: 0 !important;
 }
 
-/* List items inside References */
-div.references li {
-    margin: 0;
-    padding: 0;
+/* Optional: remove spacing from individual reference entries */
+#refs.references li {
+    margin: 0 !important;
+    padding: 0 !important;
 }
