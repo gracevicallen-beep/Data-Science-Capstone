@@ -8,6 +8,12 @@ div.references {
     margin: 0;                    /* remove extra margin from div */
     padding: 0;                   /* remove any padding */
 }
+/* Remove top/bottom margin from heading inside References */
+div.references h1,
+div.references h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
 
 h2, h3 {
   color: #232828;
