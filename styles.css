@@ -14,6 +14,10 @@ div.references h2 {
     margin-top: 0;
     margin-bottom: 0;
 }
+div.references li {
+    margin-top: 0;
+    margin-bottom: 0;
+}
 
 h2, h3 {
   color: #232828;
