@@ -1,5 +1,5 @@
 ---
-title: "GAM Fraud Analysis"
+title: "Generalized Additive Models in Fraud Detection and Pattern Recognition"
 subtitle: "Data Science Capstone Project"
 author: "Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou"
 date: "`r Sys.Date()`"
