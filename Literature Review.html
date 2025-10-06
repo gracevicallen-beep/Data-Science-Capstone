@@ -3157,11 +3157,25 @@ padding: 0 !important;
 <li><p><span class="citation" data-cites="Wood_2025">Wood (<a href="#ref-Wood_2025" role="doc-biblioref">2025</a>)</span> reviewed advances in GAM methodology, including computational improvements that allow GAMs to be applied to larger datasets. He emphasized automated smoothing parameter selection, scalable algorithms, and extensions to models beyond the mean, such as location–scale modeling and quantile regression. His work also highlighted the use of tensor-product splines and isotropic smooths for modeling interactions across variables with different scales, making GAMs applicable to more complex research questions.</p></li>
 <li><p><span class="citation" data-cites="Detmer_2025">Detmer (<a href="#ref-Detmer_2025" role="doc-biblioref">2025</a>)</span> tested GAMs as tools for detecting thresholds in ecological systems, such as abrupt changes in species response to environmental variables. Through simulation studies and a case application to Pacific hake distribution, the study found that GAMs perform well under conditions with long, high-quality datasets but are less reliable with short or noisy time series. The findings stress the importance of data quality and model validation, as GAMs may detect false thresholds if conditions are not suitable.</p></li>
 </ol>
+</section>
+<section id="sonya-melton" class="level4">
+<h4 class="anchored" data-anchor-id="sonya-melton">Sonya Melton</h4>
+<ol type="1">
+<li><p><span class="citation" data-cites="Zhu_2023">Zhu et al. (<a href="#ref-Zhu_2023" role="doc-biblioref">2023</a>)</span> present a Generative Adversarial Network (GAN) framework designed to enhance fraud detection through synthetic data generation. Their approach mitigates imbalanced class distributions and strengthens model robustness by training competing generator and discriminator networks. The system demonstrates improved detection rates in simulated financial environments but acknowledges ongoing challenges in stability and ethical use of generated data.</p></li>
+<li><p><span class="citation" data-cites="Agarwal_2021">Agarwal et al. (<a href="#ref-Agarwal_2021" role="doc-biblioref">2021</a>)</span> extend interpretability further through Neural Additive Models (NAMs), which merge the transparency of GAMs with the representational power of neural networks. By assigning a small neural sub-network to each predictor, NAMs model feature-specific nonlinearities while preserving visibility into how each input contributes to predictions. The authors demonstrate the method’s strong performance in financial, healthcare, and risk assessment domains.</p></li>
+<li><p>Complementing these efforts, <span class="citation" data-cites="GAMformer_2023">GAMformer (<a href="#ref-GAMformer_2023" role="doc-biblioref">2023</a>)</span> introduces a transformer-based approach for fitting GAMs through in-context learning. This innovation eliminates the need for time-intensive iterative optimization, enabling faster, smoother function estimation. While it performs competitively against Explainable Boosting Machines and other interpretable frameworks, it faces scalability limits when data complexity grows.</p></li>
+<li><p>Functional Generalized Additive Models <span class="citation" data-cites="FGAM_2015">(<a href="#ref-FGAM_2015" role="doc-biblioref">FGAM, 2015</a>)</span> offer another expansion, extending additive modeling to functional predictors such as temporal or spatial signals. Employing penalized tensor-product B-splines, FGAM captures nonlinear effects across continuous domains, with empirical success in brain imaging studies. Although computationally demanding, this framework demonstrates that interpretability can coexist with flexibility even in high-dimensional functional settings.</p></li>
+<li><p>Dynamic Generalized Additive Models <span class="citation" data-cites="DGAM_2021">(<a href="#ref-DGAM_2021" role="doc-biblioref">DGAM, 2021</a>)</span>incorporate latent temporal components, enabling GAMs to perform robust forecasting in dynamic environments. Through the mvgam R package, DGAMs facilitate multi-series forecasting with improved uncertainty quantification, outperforming traditional GAMs in ecological and environmental applications.</p></li>
+<li><p>Lastly, the <span class="citation" data-cites="GamHP_2020">Gam.hp (<a href="#ref-GamHP_2020" role="doc-biblioref">2020</a>)</span> enhances interpretability by offering a principled measure of variable importance within GAMs. By decomposing shared and individual variance components, it provides clearer insights into each predictor’s role, as illustrated in air quality analyses. This contribution supports more transparent communication of model results, a vital step in responsible data-driven decision-making.</p></li>
+</ol>
 
 </section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-Agarwal_2021" class="csl-entry" role="listitem">
+Agarwal, A., Frosst, N., Zhang, X., Caruana, R., &amp; Hinton, G. (2021). Neural additive models: Interpretable machine learning with neural networks. <em>Advances in Neural Information Processing Systems</em>, <em>34</em>, 4694–4706. <a href="https://arxiv.org/abs/2004.13912">https://arxiv.org/abs/2004.13912</a>
+</div>
 <div id="ref-Brossart_2015" class="csl-entry" role="listitem">
 Brossart, D. F., Clay, D. L., &amp; Willson, V. (2015). Detecting contaminated birthdates using generalized additive models. <em>BMC Bioinformatics</em>, <em>16</em>(185), 1–9. <a href="https://doi.org/10.1186/s12859-015-0636-0">https://doi.org/10.1186/s12859-015-0636-0</a>
 </div>
@@ -3170,6 +3184,18 @@ Chang, J., Guo, R., Zhao, L., &amp; Liu, H. (2022). Interpretable graph learning
 </div>
 <div id="ref-Detmer_2025" class="csl-entry" role="listitem">
 Detmer, A. (2025). Ecological thresholds and generalized additive models. <em>Journal of Ecology Research</em>, <em>45</em>(3), 215–230.
+</div>
+<div id="ref-DGAM_2021" class="csl-entry" role="listitem">
+DGAM. (2021). Dynamic generalized additive models (DGAMs) for forecasting. <em>PeerJ</em>, <em>9</em>, e10974. <a href="https://doi.org/10.7717/peerj.10974">https://doi.org/10.7717/peerj.10974</a>
+</div>
+<div id="ref-FGAM_2015" class="csl-entry" role="listitem">
+FGAM. (2015). Functional generalized additive models. <em>Statistica Sinica</em>, <em>25</em>(2), 533–558.
+</div>
+<div id="ref-GAMformer_2023" class="csl-entry" role="listitem">
+GAMformer. (2023). <em>GAMformer: In-context learning for generalized additive models</em>. arXiv preprint arXiv:2306.04301. <a href="https://arxiv.org/abs/2306.04301">https://arxiv.org/abs/2306.04301</a>
+</div>
+<div id="ref-GamHP_2020" class="csl-entry" role="listitem">
+Gam.hp. (2020). <em>Evaluating the relative importance of predictors in generalized additive models using the gam.hp r package</em>. Comprehensive R Archive Network (CRAN). <a href="https://cran.r-project.org/package=gam.hp">https://cran.r-project.org/package=gam.hp</a>
 </div>
 <div id="ref-Guisan_2002" class="csl-entry" role="listitem">
 Guisan, A., Edwards, T. C., &amp; Hastie, T. (2002). Generalized linear and generalized additive models in studies of species distributions: Setting the scene. <em>Ecological Modelling</em>, <em>157</em>(2–3), 89–100. <a href="https://doi.org/10.1016/S0304-3800(02)00204-1">https://doi.org/10.1016/S0304-3800(02)00204-1</a>
@@ -3194,6 +3220,9 @@ Wood, S. (2025). <em>Generalized additive models: An introduction with r</em> (3
 </div>
 <div id="ref-Zhang_2025" class="csl-entry" role="listitem">
 Zhang, Y., Li, X., &amp; Chen, W. (2025). Graph-based approaches for telecom fraud detection: A comparison with generalized additive models. <em>Journal of Computational Intelligence in Finance</em>, <em>38</em>(2), 155–170.
+</div>
+<div id="ref-Zhu_2023" class="csl-entry" role="listitem">
+Zhu, M., Gong, Y., Xiang, Y., Yu, H., &amp; Huo, S. (2023). <em>Utilizing GANs for fraud detection: Model training with synthetic transaction data</em>. ResearchGate. <a href="https://www.researchgate.net/publication/373914456">https://www.researchgate.net/publication/373914456</a>
 </div>
 </div></section></div></main>
 <!-- /main column -->

@@ -146,3 +146,54 @@ cybersecurity.
     are less reliable with short or noisy time series. The findings
     stress the importance of data quality and model validation, as GAMs
     may detect false thresholds if conditions are not suitable.
+
+#### Sonya Melton
+
+1.  @Zhu_2023 present a Generative Adversarial Network (GAN) framework
+    designed to enhance fraud detection through synthetic data
+    generation. Their approach mitigates imbalanced class distributions
+    and strengthens model robustness by training competing generator and
+    discriminator networks. The system demonstrates improved detection
+    rates in simulated financial environments but acknowledges ongoing
+    challenges in stability and ethical use of generated data.
+
+2.  @Agarwal_2021 extend interpretability further through Neural
+    Additive Models (NAMs), which merge the transparency of GAMs with
+    the representational power of neural networks. By assigning a small
+    neural sub-network to each predictor, NAMs model feature-specific
+    nonlinearities while preserving visibility into how each input
+    contributes to predictions. The authors demonstrate the method’s
+    strong performance in financial, healthcare, and risk assessment
+    domains.
+
+3.  Complementing these efforts, @GAMformer_2023 introduces a
+    transformer-based approach for fitting GAMs through in-context
+    learning. This innovation eliminates the need for time-intensive
+    iterative optimization, enabling faster, smoother function
+    estimation. While it performs competitively against Explainable
+    Boosting Machines and other interpretable frameworks, it faces
+    scalability limits when data complexity grows.
+
+4.  Functional Generalized Additive Models [@FGAM_2015] offer another
+    expansion, extending additive modeling to functional predictors such
+    as temporal or spatial signals. Employing penalized tensor-product
+    B-splines, FGAM captures nonlinear effects across continuous
+    domains, with empirical success in brain imaging studies. Although
+    computationally demanding, this framework demonstrates that
+    interpretability can coexist with flexibility even in
+    high-dimensional functional settings.
+
+5.  Dynamic Generalized Additive Models [@DGAM_2021]incorporate latent
+    temporal components, enabling GAMs to perform robust forecasting in
+    dynamic environments. Through the mvgam R package, DGAMs facilitate
+    multi-series forecasting with improved uncertainty quantification,
+    outperforming traditional GAMs in ecological and environmental
+    applications.
+
+6.  Lastly, the @GamHP_2020 enhances interpretability by offering a
+    principled measure of variable importance within GAMs. By
+    decomposing shared and individual variance components, it provides
+    clearer insights into each predictor’s role, as illustrated in air
+    quality analyses. This contribution supports more transparent
+    communication of model results, a vital step in responsible
+    data-driven decision-making.

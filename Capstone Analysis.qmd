@@ -22,7 +22,7 @@ editor:
 
 [**Slides**](slides.html){target="_blank"}
 
-[**Literature Review**](Literature Review.html)
+[**Literature Review**](Literature%20Review.html)
 
 ## Introduction
 
@@ -114,52 +114,41 @@ improved performance when modeling intricate, interconnected data.
 
 Sonya intro:
 
-Generalized Additive Models (GAMs) are a class of interpretable
-statistical models that provide a flexible approach to modeling
-nonlinear relationships between predictors and an outcome variable.
-Rather than assuming linear effects across all inputs, GAMs allow each
-predictor to contribute to the response through its own smooth,
-data-driven function. This additive yet flexible structure supports a
-balance between accuracy and interpretability, making GAMs particularly
-valuable in high-stakes domains such as financial fraud detection. In
-banking applications, the ability to understand and visualize how
-individual factors, such as transaction amount, time of day, or device
-type, influence the likelihood of fraudulent behavior is critical for
-compliance, risk mitigation, and transparency.
+Advancements in data science and machine learning have reshaped how
+organizations detect and prevent fraudulent financial activity. Recent
+research emphasizes the growing importance of interpretable and adaptive
+modeling frameworks—particularly Generalized Additive Models (GAMs) and
+their neural extensions—for balancing predictive accuracy with
+transparency. In financial and regulatory contexts, where accountability
+and explainability are crucial, these models offer a vital bridge
+between traditional statistical analysis and modern deep learning.
+Studies such as @Zhu_2023 demonstrate the promise of Generative
+Adversarial Networks (GANs) in fraud detection by producing synthetic
+transaction data that enhance model robustness against class imbalance.
+Similarly, @Agarwal_2021 introduce Neural Additive Models (NAMs), which
+retain the interpretability of GAMs while integrating neural networks to
+capture nonlinear relationships in complex datasets.
 
-This project applies GAMs and related interpretable models to the Fraud
-Detection Transactions Dataset from Kaggle [@Ashar_2024], a synthetic
-but realistic dataset designed to simulate patterns of financial fraud.
-The dataset includes thousands of transaction records, each labeled as
-either fraudulent or legitimate. Key predictors include:
+Emerging innovations continue to expand the GAM framework.
+@GAMformer_2023 applies transformer architectures to in-context
+learning, streamlining the estimation of smooth functions and improving
+computational efficiency. Functional and Dynamic Generalized Additive
+Models [@FGAM_2015; @DGAM_2021] further extend this methodology by
+addressing functional predictors and temporal dependencies, enhancing
+model flexibility for forecasting and time-series applications. Tools
+such as the @GamHP_2020 strengthen interpretability by quantifying each
+predictor’s contribution, allowing for clearer evaluation of model
+importance. Collectively, these advances mark a shift toward hybrid
+analytical approaches that preserve the interpretability of statistical
+models while leveraging the computational strength of modern neural
+systems.
 
--   amount: the value of the transaction
-
--   type: transaction category (e.g., payment, transfer)
-
--   oldbalanceOrg and newbalanceOrig: account balances before and after
-    the transaction
-
--   step: the hour of the transaction in a rolling window
-
--   isFlaggedFraud: whether a transaction was flagged by the internal
-    system
-
-GAMs are implemented using the mgcv package in R, where each variable's
-effect is modeled as a smooth function via splines. For example, fitting
-the model with mgcv::gam(isFraud \~ s(amount) + s(step) +
-s(oldbalanceOrg), data = fraud_data, family = binomial) allows each
-predictor’s nonlinear impact on fraud probability to be interpreted
-individually using visualization tools such as plot.gam(). This
-methodology closely aligns with the structure of Neural Additive Models
-(NAMs), which assign separate subnetworks to each feature for
-interpretability [@Agarwal_2021], as well as other modern GAM-based
-approaches like Explainable Boosting Machines (EBMs) and GAMformer,
-which aim to improve model scalability and robustness in complex
-domains. In sum, GAMs provide a transparent, effective, and
-well-supported framework for detecting fraudulent financial activity,
-particularly when feature contributions need to be clearly explained and
-trusted.
+Together, these studies establish a methodological foundation for
+applying interpretable machine learning techniques to fraud detection.
+Their emphasis on transparency, efficiency, and adaptability aligns
+directly with this capstone’s objective: to develop models that can
+detect fraudulent transactions effectively while maintaining clear and
+defensible decision processes.
 
 Kesi intro:
 
