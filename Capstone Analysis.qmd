@@ -164,66 +164,6 @@ trusted.
 
 Kesi intro:
 
-### Literature Review
-
-Fraud detection has become increasingly reliant on advanced statistical
-and machine learning approaches due to the complexity and evolving
-nature of fraudulent behaviors. Among these approaches, Generalized
-Additive Models (GAMs) provide a balance between predictive flexibility
-and interpretability, making them especially suitable for domains where
-explainability is critical, such as finance, auditing, and
-cybersecurity.
-
-1.  @Tragouda_2024 highlight GAMs’ ability to balance interpretability
-    and predictive performance in fraud detection, such as bank cheque
-    fraud. While challenges like uneven data and changing fraud patterns
-    reduce precision (5.6%) but maintain recall (77.8%), GAMs provide
-    clear explanations for regulators. Combining GAMs with other models
-    can enhance accuracy while keeping results interpretable for legal
-    and ethical oversight.
-2.  @Miller_2025 investigates GAMs for identifying fraudulent financial
-    statements, often hidden in complex accounting data. GAMs, combined
-    with models like random forests, detect irregular revenue patterns
-    and generate interpretable visualizations for auditors. Although
-    effective, GAMs may miss sophisticated frauds involving multiple
-    interacting factors. They provide a strong balance of accuracy and
-    clarity for early detection of financial fraud.
-3.  @Hanagandi_2023 explore regularized generalized linear models,
-    including Ridge, Lasso, and ElasticNet, for detecting credit card
-    fraud in highly imbalanced datasets (0.17% fraud cases). These
-    models, similar to GAMs, capture complex transaction patterns while
-    remaining interpretable. Ridge regression achieved high accuracy (up
-    to 98.2%). The study highlights that careful data preparation is
-    crucial for effective real-time fraud detection in banking
-    environments.
-4.  @Brossart_2015 discuss the application of GAMs to Medicare claims
-    data for identifying fraudulent billing and overcharging. GAMs
-    effectively detect unusual patterns and provide clear
-    visualizations, which enhance auditor trust. While highly
-    interpretable, they can be less adaptive to emerging fraud patterns
-    compared to more complex models, but their transparency makes them
-    valuable for healthcare fraud investigations.
-5.  @Chang_2022 introduced Graph Neural Additive Networks (GNANs) as an
-    extension of Generalized Additive Models (GAMs) for graph-structured
-    data, enabling fraud detection in domains such as financial
-    transaction networks and social platforms. GNANs combine graph
-    neural networks with additive modeling, capturing complex relational
-    patterns while maintaining interpretability through simple
-    visualizations. Their approach achieved strong predictive
-    performance, reaching 84.5% ROC-AUC in detecting banned or
-    suspicious users, while also providing clear, auditable explanations
-    that satisfy regulatory compliance.
-6.  In telecom fraud detection, @Zhang_2025 introduced a graph-based
-    framework that used Generalized Additive Models (GAMs) as a baseline
-    for comparison. The study highlighted that GAMs are effective for
-    modeling nonlinear patterns in sequential data, such as call
-    frequency and duration, which are important for detecting fraudulent
-    behavior. However, the results showed that GAMs were outperformed by
-    graph neural networks (GNNs) in capturing complex network
-    interactions, suggesting that GAMs are more appropriate for simpler
-    fraud detection tasks where interpretability is prioritized over
-    modeling intricate relationships (Zhang et al., 2025).
-
 ## Methods
 
 Formally, a GAM can be expressed as:
@@ -273,7 +213,7 @@ preprocessing steps like data cleaning, categorical encoding, or
 normalization. These challenges necessitate robust modeling techniques
 to handle noise and ensure accurate predictions.
 
-#### **Key Characteristics** 
+#### **Key Characteristics**
 
 The dataset simulates real-world financial transaction patterns,
 capturing diverse user behaviors and transaction characteristics while
