@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou">
+<meta name="dcterms.date" content="2025-10-07">
 
 <title>Generalized Additive Models in Fraud Detection and Pattern Recognition</title>
 <style>
@@ -3260,7 +3261,7 @@ padding: 0 !important;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">Invalid Date</p>
+      <p class="date">October 7, 2025</p>
     </div>
   </div>
   
@@ -3290,6 +3291,12 @@ padding: 0 !important;
 <p>Emerging innovations continue to expand the GAM framework. <span class="citation" data-cites="GAMformer_2023">GAMformer (<a href="#ref-GAMformer_2023" role="doc-biblioref">2023</a>)</span> applies transformer architectures to in-context learning, streamlining the estimation of smooth functions and improving computational efficiency. Functional and Dynamic Generalized Additive Models <span class="citation" data-cites="FGAM_2015 DGAM_2021">(<a href="#ref-DGAM_2021" role="doc-biblioref">DGAM, 2021</a>; <a href="#ref-FGAM_2015" role="doc-biblioref">FGAM, 2015</a>)</span> further extend this methodology by addressing functional predictors and temporal dependencies, enhancing model flexibility for forecasting and time-series applications. Tools such as the <span class="citation" data-cites="GamHP_2020">Gam.hp (<a href="#ref-GamHP_2020" role="doc-biblioref">2020</a>)</span> strengthen interpretability by quantifying each predictor’s contribution, allowing for clearer evaluation of model importance. Collectively, these advances mark a shift toward hybrid analytical approaches that preserve the interpretability of statistical models while leveraging the computational strength of modern neural systems.</p>
 <p>Together, these studies establish a methodological foundation for applying interpretable machine learning techniques to fraud detection. Their emphasis on transparency, efficiency, and adaptability aligns directly with this capstone’s objective: to develop models that can detect fraudulent transactions effectively while maintaining clear and defensible decision processes.</p>
 <p>Kesi intro:</p>
+<p>In modern data analytics, the demand for interpretable yet flexible modeling techniques has grown significantly—particularly in domains such as fraud detection, healthcare, and finance, where transparency is as critical as accuracy. Generalized Additive Models (GAMs) offer an elegant solution to this challenge by bridging the gap between traditional linear models and complex machine learning systems. Originally introduced by <span class="citation" data-cites="Hastie_Tibshirani_1990">Hastie &amp; Tibshirani (<a href="#ref-Hastie_Tibshirani_1990" role="doc-biblioref">1990</a>)</span>, GAMs extend the framework of Generalized Linear Models (GLMs) by replacing the strictly linear predictor with a sum of smooth, data-driven functions. This approach enables models to capture non-linear patterns while maintaining a clear, interpretable structure that stakeholders and regulators can easily understand.</p>
+<p>In essence, GAMs model the response variable as an additive combination of smooth transformations of individual predictors—allowing relationships to bend, saturate, or shift dynamically with the data. Unlike black-box algorithms, GAMs provide transparent risk curves that visualize how each feature influences the outcome, making them especially valuable for high-stakes decision-making. As <span class="citation" data-cites="Zlaoui_2018">Zlaoui (<a href="#ref-Zlaoui_2018" role="doc-biblioref">2018</a>)</span> illustrates, this transparency allows practitioners to see where risk increases, stabilizes, or reverses, while the statistical foundations provided in the <span class="citation" data-cites="HalDa_2012">HalDa (<a href="#ref-HalDa_2012" role="doc-biblioref">2012</a>)</span> Carnegie Mellon University lecture notes demonstrate how GAMs generalize GLMs through penalized likelihood estimation and iteratively reweighted least squares (IRLS).</p>
+<p>The modern implementation of GAMs, developed through the mgcv package in R , provides an advanced ecosystem for fitting, smoothing, and diagnosing models <span class="citation" data-cites="Wood_2017 Wood_2025">(<a href="#ref-Wood_2017" role="doc-biblioref">Wood, 2017</a>, <a href="#ref-Wood_2025" role="doc-biblioref">2025</a>)</span>. Wood’s text further introduces penalization techniques that control smoothness, prevent overfitting, and manage issues such as concurvity, making GAMs robust even when faced with noisy or high-dimensional data. Building upon these foundations, Microsoft’s Explainable Boosting Machine (EBM)—a computationally optimized variant of the GAM—extends the framework to include limited pairwise interactions, further improving predictive performance without sacrificing interpretability <span class="citation" data-cites="Lou_Caruana_Gehrke_2012">(<a href="#ref-Lou_Caruana_Gehrke_2012" role="doc-biblioref">Lou et al., 2012</a>)</span>.</p>
+<p>This project applies the GAM and EBM frameworks to the problem of fraud detection, a domain where rare-event modeling, model transparency, and adaptability are essential. Fraudulent transactions often exhibit non-linear and threshold-based patterns, such as abrupt risk increases beyond certain transaction amounts or at specific times of day. Traditional logistic regression may fail to capture these effects, while deep learning models, though powerful, are often too opaque for regulated industries. GAMs, by contrast, allow the creation of interpretable fraud risk curves that investigators and auditors can review directly, ensuring both statistical rigor and regulatory compliance.</p>
+<p>The research outlined in this paper will explore the end-to-end development of a GAM-based fraud detection model. This includes data acquisition and preprocessing, class imbalance handling, model training using mgcv and pyGAM, and benchmarking against traditional classifiers and tree-based ensembles. Performance will be evaluated using metrics tailored for imbalanced classification—such as Precision, Recall, F1-score, and AUC-ROC—while visual diagnostics will illustrate how key predictors contribute to fraud likelihood. The project also investigates extensions such as EBM pairwise interactions, time-based validation, and robustness testing to assess model stability in the face of concept drift and adversarial adaptation.</p>
+<p>Through this work, we aim to demonstrate that Generalized Additive Models and their extensions can serve as a transparent, high-performing foundation for modern fraud analytics—offering a rare combination of interpretability, adaptability, and predictive strength that is well-suited to real-world, high-risk environments.</p>
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
@@ -3366,11 +3373,20 @@ Gam.hp. (2020). <em>Evaluating the relative importance of predictors in generali
 <div id="ref-Guisan_2002" class="csl-entry" role="listitem">
 Guisan, A., Edwards, T. C., &amp; Hastie, T. (2002). Generalized linear and generalized additive models in studies of species distributions: Setting the scene. <em>Ecological Modelling</em>, <em>157</em>(2–3), 89–100. <a href="https://doi.org/10.1016/S0304-3800(02)00204-1">https://doi.org/10.1016/S0304-3800(02)00204-1</a>
 </div>
+<div id="ref-HalDa_2012" class="csl-entry" role="listitem">
+HalDa, C. (2012). <em>Generalized linear models and generalized additive models (lecture notes, chapter 13)</em>. Department of Statistics, Carnegie Mellon University. <a href="http://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/13/lecture-13.pdf">http://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/13/lecture-13.pdf</a>
+</div>
 <div id="ref-Hanagandi_2023" class="csl-entry" role="listitem">
 Hanagandi, S., Dhar, M., &amp; Buescher, D. (2023). Enhancing credit card fraud detection with regularized generalized linear models: A comparative analysis of down-sampling and up-sampling techniques. <em>International Journal of Innovative Science and Research Technology</em>, <em>8</em>(9), 1533–1539.
 </div>
 <div id="ref-Hastie_1986" class="csl-entry" role="listitem">
 Hastie, T., &amp; Tibshirani, R. (1986). Generalized additive models. <em>Statistical Science</em>, <em>1</em>(3), 297–310. <a href="http://www.jstor.org/stable/2245459">http://www.jstor.org/stable/2245459</a>
+</div>
+<div id="ref-Hastie_Tibshirani_1990" class="csl-entry" role="listitem">
+Hastie, T., &amp; Tibshirani, R. (1990). <em>Generalized additive models</em>. Chapman &amp; Hall/CRC.
+</div>
+<div id="ref-Lou_Caruana_Gehrke_2012" class="csl-entry" role="listitem">
+Lou, Y., Caruana, R., &amp; Gehrke, J. (2012). Intelligible models for classification and regression. <em>Proceedings of the 18th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining</em>, 150–158. <a href="https://doi.org/10.1145/2339530.2339556">https://doi.org/10.1145/2339530.2339556</a>
 </div>
 <div id="ref-Miller_2025" class="csl-entry" role="listitem">
 Miller, D. L. (2025). <em>Gam model – fraud detection in darknet markets using generalized additive models</em>. Figshare. <a href="https://doi.org/10.6084/m9.figshare.28618408">https://doi.org/10.6084/m9.figshare.28618408</a>
@@ -3381,11 +3397,20 @@ Tragouda, K., Papadopoulos, T., &amp; Stefanou, A. (2024). Identification of fra
 <div id="ref-White_2020" class="csl-entry" role="listitem">
 White, L. F., Jiang, W., Ma, Y., So-Armah, K., Samet, J. H., &amp; Cheng, D. M. (2020). Tutorial in biostatistics: The use of generalized additive models to evaluate alcohol consumption as an exposure variable. <em>Drug and Alcohol Dependence</em>, <em>209</em>, 107944. <a href="https://doi.org/10.1016/j.drugalcdep.2020.107944">https://doi.org/10.1016/j.drugalcdep.2020.107944</a>
 </div>
+<div id="ref-Wood_2017" class="csl-entry" role="listitem">
+Wood, S. N. (2017). <em>Generalized additive models: An introduction with r</em> (2nd ed.). Chapman; Hall/CRC.
+</div>
+<div id="ref-Wood_2025" class="csl-entry" role="listitem">
+Wood, S. N. (2025). <em>Mgcv: Mixed GAM computation vehicle with automatic smoothness estimation (r package version 1.9-1)</em>. Comprehensive R Archive Network (CRAN). <a href="https://cran.r-project.org/package=mgcv">https://cran.r-project.org/package=mgcv</a>
+</div>
 <div id="ref-Zhang_2025" class="csl-entry" role="listitem">
 Zhang, Y., Li, X., &amp; Chen, W. (2025). Graph-based approaches for telecom fraud detection: A comparison with generalized additive models. <em>Journal of Computational Intelligence in Finance</em>, <em>38</em>(2), 155–170.
 </div>
 <div id="ref-Zhu_2023" class="csl-entry" role="listitem">
 Zhu, M., Gong, Y., Xiang, Y., Yu, H., &amp; Huo, S. (2023). <em>Utilizing GANs for fraud detection: Model training with synthetic transaction data</em>. ResearchGate. <a href="https://www.researchgate.net/publication/373914456">https://www.researchgate.net/publication/373914456</a>
+</div>
+<div id="ref-Zlaoui_2018" class="csl-entry" role="listitem">
+Zlaoui, K. (2018). <em>A (very) quick introduction to GAMs</em>. Medium. <a href="https://towardsdatascience.com/a-very-quick-introduction-to-gams-64f0c1f59f92">https://towardsdatascience.com/a-very-quick-introduction-to-gams-64f0c1f59f92</a>
 </div>
 </div></section></div></main>
 <!-- /main column -->

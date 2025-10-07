@@ -2,7 +2,7 @@
 title: "Generalized Additive Models in Fraud Detection and Pattern Recognition"
 subtitle: "Data Science Capstone Project"
 author: "Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou"
-date: "`r Sys.Date()`"
+date: "October 7, 2025"
 format: 
   html:
     code-fold: true       # Allows folding of code chunks
@@ -151,6 +151,73 @@ detect fraudulent transactions effectively while maintaining clear and
 defensible decision processes.
 
 Kesi intro:
+
+In modern data analytics, the demand for interpretable yet flexible
+modeling techniques has grown significantly—particularly in domains such
+as fraud detection, healthcare, and finance, where transparency is as
+critical as accuracy. Generalized Additive Models (GAMs) offer an
+elegant solution to this challenge by bridging the gap between
+traditional linear models and complex machine learning systems.
+Originally introduced by @Hastie_Tibshirani_1990, GAMs extend the
+framework of Generalized Linear Models (GLMs) by replacing the strictly
+linear predictor with a sum of smooth, data-driven functions. This
+approach enables models to capture non-linear patterns while maintaining
+a clear, interpretable structure that stakeholders and regulators can
+easily understand.
+
+In essence, GAMs model the response variable as an additive combination
+of smooth transformations of individual predictors—allowing
+relationships to bend, saturate, or shift dynamically with the data.
+Unlike black-box algorithms, GAMs provide transparent risk curves that
+visualize how each feature influences the outcome, making them
+especially valuable for high-stakes decision-making. As @Zlaoui_2018
+illustrates, this transparency allows practitioners to see where risk
+increases, stabilizes, or reverses, while the statistical foundations
+provided in the @HalDa_2012 Carnegie Mellon University lecture notes
+demonstrate how GAMs generalize GLMs through penalized likelihood
+estimation and iteratively reweighted least squares (IRLS).
+
+The modern implementation of GAMs, developed through the mgcv package in
+R , provides an advanced ecosystem for fitting, smoothing, and
+diagnosing models [@Wood_2017; @Wood_2025]. Wood’s text further
+introduces penalization techniques that control smoothness, prevent
+overfitting, and manage issues such as concurvity, making GAMs robust
+even when faced with noisy or high-dimensional data. Building upon these
+foundations, Microsoft’s Explainable Boosting Machine (EBM)—a
+computationally optimized variant of the GAM—extends the framework to
+include limited pairwise interactions, further improving predictive
+performance without sacrificing interpretability
+[@Lou_Caruana_Gehrke_2012].
+
+This project applies the GAM and EBM frameworks to the problem of fraud
+detection, a domain where rare-event modeling, model transparency, and
+adaptability are essential. Fraudulent transactions often exhibit
+non-linear and threshold-based patterns, such as abrupt risk increases
+beyond certain transaction amounts or at specific times of day.
+Traditional logistic regression may fail to capture these effects, while
+deep learning models, though powerful, are often too opaque for
+regulated industries. GAMs, by contrast, allow the creation of
+interpretable fraud risk curves that investigators and auditors can
+review directly, ensuring both statistical rigor and regulatory
+compliance.
+
+The research outlined in this paper will explore the end-to-end
+development of a GAM-based fraud detection model. This includes data
+acquisition and preprocessing, class imbalance handling, model training
+using mgcv and pyGAM, and benchmarking against traditional classifiers
+and tree-based ensembles. Performance will be evaluated using metrics
+tailored for imbalanced classification—such as Precision, Recall,
+F1-score, and AUC-ROC—while visual diagnostics will illustrate how key
+predictors contribute to fraud likelihood. The project also investigates
+extensions such as EBM pairwise interactions, time-based validation, and
+robustness testing to assess model stability in the face of concept
+drift and adversarial adaptation.
+
+Through this work, we aim to demonstrate that Generalized Additive
+Models and their extensions can serve as a transparent, high-performing
+foundation for modern fraud analytics—offering a rare combination of
+interpretability, adaptability, and predictive strength that is
+well-suited to real-world, high-risk environments.
 
 ## Methods
 
