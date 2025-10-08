@@ -26,198 +26,113 @@ editor:
 
 ## Introduction
 
-Grace intro:
+Generalized Additive Models (GAMs) have emerged as a powerful extension
+of traditional regression methods, offering a balance between predictive
+flexibility and interpretability. Originally introduced by @Hastie_1986
+and @Hastie_Tibshirani_1990, GAMs build on the framework of Generalized
+Linear Models (GLMs) by replacing the strictly linear predictor with a
+sum of smooth, data-driven functions. This structure allows models to
+capture complex nonlinear relationships while preserving
+interpretability, making them especially valuable in fields where
+transparency is critical, including finance, healthcare, auditing, and
+cybersecurity. Their ability to represent nonlinear effects in a way
+that stakeholders and regulators can directly review has positioned GAMs
+as an important tool in modern statistical and machine learning
+applications.
 
-Generalized Additive Models (GAMs) build on traditional regression
-methods by allowing more flexible and nonlinear relationships between
-predictors and outcomes. Early work introduced GAMs as an extension of
-generalized linear models that can capture complex patterns in data that
-linear models often miss [@Hastie_1986]. Later research focused on
-improving how GAMs are fit, making them more efficient and able to
-handle larger datasets [@Detmer_2025]. These models have been widely
-applied in different fields, such as ecology and biostatistics, where
-they have been used to study species distributions [@Guisan_2002],
-detect ecological thresholds [@Detmer_2025], and explore health outcomes
-like alcohol consumption [@White_2020]. Together, these studies show
-that GAMs are useful for uncovering hidden structure in data, but they
-also highlight challenges such as the risk of overfitting, difficulty of
-interpretation, and reliance on data quality.
+The foundations of GAMs are grounded in penalized likelihood estimation
+and iteratively reweighted least squares [@HalDa_2012], while modern
+implementations such as the mgcv package in R [@Wood_2017; @Wood_2025]
+have greatly improved their efficiency, scalability, and robustness.
+Penalization techniques introduced by @Wood_2017 allow smoothness
+control, prevent overfitting, and address issues such as concurvity,
+making GAMs well-suited for noisy or high-dimensional datasets. These
+developments have made GAMs increasingly practical for real-world
+applications. Transparency also remains central: as @Zlaoui_2018
+illustrates, GAMs provide interpretable risk curves that visualize how
+each feature influences an outcome, offering critical insight in
+high-stakes environments.
 
-More recent work has provided additional perspective on how GAMs operate
-and when they are most reliable. A Bayesian approach has helped explain
-how smoothing and variable selection can be understood as adding
-structure to the model, while also giving clearer ways to measure
-uncertainty [@Miller_2025]. At the same time, studies show that GAMs
-perform best when data are rich and patterns are strong, while noisy or
-sparse datasets can lead to misleading results [@Detmer_2025;
-@Guisan_2002]. This makes GAMs well-suited as exploratory models that
-highlight important nonlinear relationships, but less suited for drawing
-final conclusions on their own. For our project on fraud detection,
-these insights are valuable because they justify using GAMs to reveal
-complex patterns in financial data, while reminding us to be careful
-about issues like overfitting, noise, and interpretability.
+Applications of GAMs across different fields underscore their
+versatility. In ecology, they have been used to map species
+distributions and detect environmental thresholds [@Guisan_2002;
+@Detmer_2025]. In biostatistics, they have informed studies of health
+outcomes such as alcohol use [@White_2020]. In finance and auditing,
+GAMs have uncovered irregular revenue patterns and detected fraudulent
+Medicare billing, with results that auditors and regulators could
+interpret directly [@Brossart_2015; @Miller_2025]. Even in challenging
+contexts where noisy or uneven data reduce precision, studies have shown
+that recall and interpretability remain strong advantages of the
+approach [@Tragouda_2024; @Guisan_2002; @Detmer_2025].
 
-Building on this foundation, our project applies GAMs to the Fraud
-Detection Transactions Dataset from Kaggle [@Ashar_2024], a synthetic
-but realistic dataset designed to simulate patterns of financial fraud.
-Using RStudio and the mgcv package, we will conduct a series of GAM
-analyses to identify which variables within the dataset serve as
-significant indicators of fraud. This approach allows us to explore GAM
-methodology in practice, evaluating both model performance and
-interpretability while gaining hands-on experience with smoothing,
-variable selection, and visualization techniques in a real-world-style
-dataset.
+Building on these foundations, researchers have proposed several
+extensions and innovations. Functional and Dynamic GAMs account for
+functional predictors and temporal dependencies, enhancing model
+flexibility for forecasting and time-series applications [@FGAM_2015;
+@DGAM_2021]. Neural-inspired variants such as Neural Additive Models
+[@Agarwal_2021] and GAMformer [@GAMformer_2023] integrate deep learning
+techniques, improving computational efficiency and extending the ability
+of GAMs to model complex nonlinear data. Bayesian approaches provide
+clearer ways to quantify uncertainty and guide variable selection
+[@Miller_2025]. Other tools such as @GamHP_2020 strengthen transparency
+by quantifying predictor contributions. Furthermore, Microsoft’s
+Explainable Boosting Machine explored by @Lou_Caruana_Gehrke_2012 adapts
+the GAM framework to include limited interactions, improving predictive
+performance while retaining interpretability.
 
-Pingping intro:
+Research also highlights the role of GAMs within broader fraud detection
+strategies. In financial contexts, @Tragouda_2024 applied GAMs to bank
+cheque fraud, demonstrating high recall (77.8%) even when data imbalance
+reduced precision. @Brossart_2015 used GAMs to identify fraudulent
+Medicare billing, showing that interpretability helped build auditor
+trust despite challenges with adapting to emerging patterns.
+@Miller_2025 combined GAMs with ensemble models such as random forests
+to detect irregular revenue in financial statements, producing
+visualizations auditors could use directly. Beyond GAMs, graph-based
+frameworks have emerged as complementary approaches. For example,
+@Chang_2022 introduced Graph Neural Additive Networks (GNANs), extending
+GAMs to graph-structured data such as transaction networks and achieving
+84.5% ROC-AUC in detecting suspicious users. @Zhang_2025 demonstrated
+that GAMs could model sequential features in telecom fraud detection but
+were often outperformed by graph neural networks (GNNs) when modeling
+complex relational data.
 
-Fraud detection has become increasingly reliant on advanced statistical
-and machine learning approaches due to the complexity and evolving
-nature of fraudulent behaviors. Among these approaches, Generalized
-Additive Models (GAMs) offer a strong balance between predictive
-flexibility and interpretability, making them particularly valuable in
-domains where explainability is critical, such as finance, auditing,
-healthcare, and cybersecurity.
+In parallel, other interpretable machine learning techniques continue to
+shape the fraud detection landscape. @Hanagandi_2023 applied regularized
+generalized linear models, including Ridge, Lasso, and ElasticNet, to
+highly imbalanced credit card fraud datasets, achieving strong
+performance (up to 98.2% accuracy with Ridge regression) and showing
+that careful preprocessing is essential for real-time fraud detection.
+Generative approaches also contribute: @Zhu_2023 demonstrated how
+Generative Adversarial Networks (GANs) can generate synthetic
+transaction data to improve robustness against class imbalance.
+Collectively, these innovations expand the interpretability-performance
+frontier and highlight how transparent modeling frameworks, including
+GAMs and their extensions, remain central to modern fraud analytics.
 
-Recent studies highlight both the strengths and limitations of GAMs in
-fraud detection. For example, @Tragouda_2024 demonstrated the
-effectiveness of GAMs in detecting bank cheque fraud, showing that while
-uneven data and shifting fraud patterns reduced precision (5.6%), GAMs
-maintained high recall (77.8%) and provided regulator-friendly
-explanations. Similarly, @Miller_2025 applied GAMs to fraudulent
-financial statements, showing that combining GAMs with models like
-random forests can uncover irregular revenue patterns and provide
-auditors with interpretable visualizations. In healthcare,
-@Brossart_2015 used GAMs to identify fraudulent Medicare billing, where
-their transparency built auditor trust, though they were less adaptive
-to emerging fraud patterns.
+The primary objectives of this analysis are to leverage the fraud
+detection transactions dataset to build and evaluate effective fraud
+detection models using Generalized Additive Models (GAMs). Specifically,
+the goals are:
 
-Other interpretable methods, such as regularized generalized linear
-models (Ridge, Lasso, and ElasticNet), have also proven effective in
-fraud detection. @Hanagandi_2023 applied these models to highly
-imbalanced credit card fraud datasets, achieving strong performance (up
-to 98.2% accuracy with Ridge regression) and showing that careful data
-preparation is crucial for real-time detection.
+-   Develop Robust Models: Construct models that accurately distinguish
+    between fraudulent and legitimate transactions using GAMs.
 
-Beyond traditional GAMs, newer extensions demonstrate how fraud
-detection can benefit from graph-based modeling. @Chang_2022 introduced
-Graph Neural Additive Networks (GNANs), which extend GAMs to
-graph-structured data such as transactions or social networks. GNANs
-maintain interpretability while capturing complex relational patterns,
-achieving 84.5% ROC-AUC in detecting banned or suspicious users.
-Similarly, @Zhang_2025 explored telecom fraud detection using
-graph-based frameworks, finding that GAMs effectively modeled sequential
-features like call frequency and duration but were outperformed by graph
-neural networks (GNNs) in capturing complex network interactions. These
-findings suggest that while GAMs remain valuable for interpretable,
-regulator-friendly fraud detection, newer graph-based models offer
-improved performance when modeling intricate, interconnected data.
+-   Identify Key Features: Pinpoint significant variables that
+    contribute to fraud risk, improving interpretability and providing
+    actionable insights for financial institutions.
 
-Sonya intro:
+-   Provide Practical Insights: Generate findings that enhance anomaly
+    detection, risk management, and financial security strategies, while
+    addressing challenges such as noise and class imbalance.
 
-Advancements in data science and machine learning have reshaped how
-organizations detect and prevent fraudulent financial activity. Recent
-research emphasizes the growing importance of interpretable and adaptive
-modeling frameworks—particularly Generalized Additive Models (GAMs) and
-their neural extensions—for balancing predictive accuracy with
-transparency. In financial and regulatory contexts, where accountability
-and explainability are crucial, these models offer a vital bridge
-between traditional statistical analysis and modern deep learning.
-Studies such as @Zhu_2023 demonstrate the promise of Generative
-Adversarial Networks (GANs) in fraud detection by producing synthetic
-transaction data that enhance model robustness against class imbalance.
-Similarly, @Agarwal_2021 introduce Neural Additive Models (NAMs), which
-retain the interpretability of GAMs while integrating neural networks to
-capture nonlinear relationships in complex datasets.
-
-Emerging innovations continue to expand the GAM framework.
-@GAMformer_2023 applies transformer architectures to in-context
-learning, streamlining the estimation of smooth functions and improving
-computational efficiency. Functional and Dynamic Generalized Additive
-Models [@FGAM_2015; @DGAM_2021] further extend this methodology by
-addressing functional predictors and temporal dependencies, enhancing
-model flexibility for forecasting and time-series applications. Tools
-such as the @GamHP_2020 strengthen interpretability by quantifying each
-predictor’s contribution, allowing for clearer evaluation of model
-importance. Collectively, these advances mark a shift toward hybrid
-analytical approaches that preserve the interpretability of statistical
-models while leveraging the computational strength of modern neural
-systems.
-
-Together, these studies establish a methodological foundation for
-applying interpretable machine learning techniques to fraud detection.
-Their emphasis on transparency, efficiency, and adaptability aligns
-directly with this capstone’s objective: to develop models that can
-detect fraudulent transactions effectively while maintaining clear and
-defensible decision processes.
-
-Kesi intro:
-
-In modern data analytics, the demand for interpretable yet flexible
-modeling techniques has grown significantly—particularly in domains such
-as fraud detection, healthcare, and finance, where transparency is as
-critical as accuracy. Generalized Additive Models (GAMs) offer an
-elegant solution to this challenge by bridging the gap between
-traditional linear models and complex machine learning systems.
-Originally introduced by @Hastie_Tibshirani_1990, GAMs extend the
-framework of Generalized Linear Models (GLMs) by replacing the strictly
-linear predictor with a sum of smooth, data-driven functions. This
-approach enables models to capture non-linear patterns while maintaining
-a clear, interpretable structure that stakeholders and regulators can
-easily understand.
-
-In essence, GAMs model the response variable as an additive combination
-of smooth transformations of individual predictors—allowing
-relationships to bend, saturate, or shift dynamically with the data.
-Unlike black-box algorithms, GAMs provide transparent risk curves that
-visualize how each feature influences the outcome, making them
-especially valuable for high-stakes decision-making. As @Zlaoui_2018
-illustrates, this transparency allows practitioners to see where risk
-increases, stabilizes, or reverses, while the statistical foundations
-provided in the @HalDa_2012 Carnegie Mellon University lecture notes
-demonstrate how GAMs generalize GLMs through penalized likelihood
-estimation and iteratively reweighted least squares (IRLS).
-
-The modern implementation of GAMs, developed through the mgcv package in
-R , provides an advanced ecosystem for fitting, smoothing, and
-diagnosing models [@Wood_2017; @Wood_2025]. Wood’s text further
-introduces penalization techniques that control smoothness, prevent
-overfitting, and manage issues such as concurvity, making GAMs robust
-even when faced with noisy or high-dimensional data. Building upon these
-foundations, Microsoft’s Explainable Boosting Machine (EBM)—a
-computationally optimized variant of the GAM—extends the framework to
-include limited pairwise interactions, further improving predictive
-performance without sacrificing interpretability
-[@Lou_Caruana_Gehrke_2012].
-
-This project applies the GAM and EBM frameworks to the problem of fraud
-detection, a domain where rare-event modeling, model transparency, and
-adaptability are essential. Fraudulent transactions often exhibit
-non-linear and threshold-based patterns, such as abrupt risk increases
-beyond certain transaction amounts or at specific times of day.
-Traditional logistic regression may fail to capture these effects, while
-deep learning models, though powerful, are often too opaque for
-regulated industries. GAMs, by contrast, allow the creation of
-interpretable fraud risk curves that investigators and auditors can
-review directly, ensuring both statistical rigor and regulatory
-compliance.
-
-The research outlined in this paper will explore the end-to-end
-development of a GAM-based fraud detection model. This includes data
-acquisition and preprocessing, class imbalance handling, model training
-using mgcv and pyGAM, and benchmarking against traditional classifiers
-and tree-based ensembles. Performance will be evaluated using metrics
-tailored for imbalanced classification—such as Precision, Recall,
-F1-score, and AUC-ROC—while visual diagnostics will illustrate how key
-predictors contribute to fraud likelihood. The project also investigates
-extensions such as EBM pairwise interactions, time-based validation, and
-robustness testing to assess model stability in the face of concept
-drift and adversarial adaptation.
-
-Through this work, we aim to demonstrate that Generalized Additive
-Models and their extensions can serve as a transparent, high-performing
-foundation for modern fraud analytics—offering a rare combination of
-interpretability, adaptability, and predictive strength that is
-well-suited to real-world, high-risk environments.
+In this study, we apply GAM methodology using RStudio and the mgcv
+package to the Fraud Detection Transactions Dataset from Kaggle
+[@Ashar_2024]. This synthetic yet realistic dataset provides an
+opportunity to test GAMs in a controlled but meaningful context. Our aim
+is to evaluate whether GAMs can balance predictive strength with
+interpretability, creating models that are both accurate and transparent
+for fraud detection.
 
 ## Methods
 
@@ -277,10 +192,10 @@ for binary classification tasks, with transactions labeled as fraudulent
 (1) or non-fraudulent (0), and includes 21 features categorized as
 follows:
 
--   **Size and Scope:** Contains thousands of individual transactions,
-    each labeled as either fraudulent (1) or non-fraudulent (0).
+-   Size and Scope: Contains thousands of individual transactions, each
+    labeled as either fraudulent (1) or non-fraudulent (0).
 
--   **Features (21 total):**
+-   Features (21 total):
 
     -   Numerical variables: transaction amounts, risk scores, balances,
         and other continuous measures.
@@ -291,17 +206,17 @@ follows:
     -   Temporal variables: transaction time, day, and sequencing
         patterns that capture behavioral dynamics.
 
--   **Label Distribution:** Fraudulent transactions represent a small
+-   Label Distribution: Fraudulent transactions represent a small
     percentage of the data, reflecting the real-world class imbalance in
     fraud detection problems.
 
--   **Realism:** Although synthetic, the dataset mirrors real-world
-    fraud scenarios by including behavioral signals, unusual spending
+-   Realism: Although synthetic, the dataset mirrors real-world fraud
+    scenarios by including behavioral signals, unusual spending
     patterns, and high-risk profiles.
 
-**Flexibility:** Supports various modeling approaches, from
-interpretable methods (e.g., GAMs, logistic regression) to
-high-performance ensemble models (e.g., XGBoost).
+Flexibility: Supports various modeling approaches, from interpretable
+methods (e.g., GAMs, logistic regression) to high-performance ensemble
+models (e.g., XGBoost).
 
 ### Modeling and Results
 
