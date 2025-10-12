@@ -218,6 +218,309 @@ Flexibility: Supports various modeling approaches, from interpretable
 methods (e.g., GAMs, logistic regression) to high-performance ensemble
 models (e.g., XGBoost).
 
+#### **Visualizations**
+
+```{r}
+# Load libraries
+library(tidyverse)
+library(janitor)
+library(gt)
+library(scales)
+
+# === Load dataset ===
+data_path <- "synthetic_fraud_dataset.csv"
+df <- readr::read_csv(data_path, show_col_types = FALSE) |>
+  clean_names()
+
+# === Create count tables ===
+tbl_type <- df |>
+  count(transaction_type, name = "Count") |>
+  arrange(desc(Count)) |>
+  rename(Type = transaction_type)
+
+tbl_device <- df |>
+  count(device_type, name = "Count") |>
+  arrange(desc(Count)) |>
+  rename(Device = device_type)
+
+tbl_merchant <- df |>
+  count(merchant_category, name = "Count") |>
+  arrange(desc(Count)) |>
+  rename(Merchant_Category = merchant_category)
+
+# === Blue Theme for gt Tables ===
+style_blue_gt <- function(.data, title_text) {
+  .data |>
+    gt() |>
+    tab_header(title = md(title_text)) |>
+    fmt_number(columns = "Count", decimals = 0, sep_mark = ",") |>
+    tab_options(
+      table.font.names = "Arial",
+      table.font.size  = 14,
+      data_row.padding = px(6),
+      heading.align    = "left",
+      table.border.top.color    = "darkblue",
+      table.border.top.width    = px(3),
+      table.border.bottom.color = "darkblue",
+      table.border.bottom.width = px(3)
+    ) |>
+    tab_style(
+      style = list(cell_fill(color = "darkblue"),
+                   cell_text(color = "white", weight = "bold")),
+      locations = cells_title(groups = "title")
+    ) |>
+    tab_style(
+      style = list(cell_fill(color = "steelblue"),
+                   cell_text(color = "white", weight = "bold")),
+      locations = cells_column_labels(everything())
+    ) |>
+    opt_row_striping() |>
+    cols_align("right", columns = "Count")
+}
+
+# === Render all three blue tables ===
+style_blue_gt(tbl_type, "Table 1 – Transaction Types and Counts")
+style_blue_gt(tbl_device, "Table 2 – Device Types and Counts")
+style_blue_gt(tbl_merchant, "Table 3 – Merchant Categories and Counts")
+
+
+```
+
+**Categorical Variable Count Tables**
+
+These tables display the counts for our categorical variables. While the
+dataset is synthetic and the categories are relatively evenly
+distributed, generalized additive models (GAMs) remain an appropriate
+analytical approach. GAMs provide the flexibility to model complex,
+nonlinear relationships between predictors and outcomes, accommodating
+both categorical and continuous variables. The even distribution of
+categories in the synthetic data does not compromise the validity of
+GAMs; it primarily affects the interpretability of specific category
+effects rather than the model’s overall applicability. Therefore, GAMs
+can still yield meaningful insights into the underlying patterns and
+relationships within this dataset.
+
+```{r}
+# Load libraries
+library(ggplot2)
+library(dplyr)
+library(tidyr)    # For pivot_longer
+library(gridExtra) # For arranging plots
+#install.packages("moments") 
+library(moments)   # For skewness and kurtosis
+```
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(patchwork)  # for arranging multiple ggplots
+
+# Load dataset
+fraud_data <- read.csv("synthetic_fraud_dataset.csv")
+
+# Convert Timestamp to date and calculate Issuance_Year if needed
+fraud_data <- fraud_data %>%
+  mutate(
+    Timestamp = ymd_hms(Timestamp, quiet = TRUE),  # adjust format if needed
+    Transaction_Year = year(Timestamp),
+    Issuance_Year = Transaction_Year - Card_Age
+  ) %>%
+  filter(!is.na(Card_Age))  # remove rows with NA in Card_Age
+
+# Variables to plot (move Transaction_Amount to last)
+numeric_vars <- c("Account_Balance", "Transaction_Distance", "Risk_Score", "Card_Age", "Transaction_Amount")
+
+# Create a list to store plots
+plot_list <- list()
+
+# Generate plots and store in the list
+for (var in numeric_vars) {
+  p <- ggplot(fraud_data, aes_string(x = var)) +
+    geom_histogram(fill = "steelblue", color = "white", bins = 30) +
+    labs(title = paste("Distribution of", var),
+         x = var,
+         y = "Count") +
+    theme_light()
+  
+  plot_list[[var]] <- p
+}
+
+# Arrange plots in a grid: 2 plots per row
+(plot_list[[1]] | plot_list[[2]]) /
+(plot_list[[3]] | plot_list[[4]]) /
+plot_list[[5]]  # Transaction_Amount appears last
+
+```
+
+**Distribution of Transaction Amount**
+
+The histogram shows a strong right-skewed distribution — most
+transactions involve small amounts, while a few high-value transactions
+exist on the far right tail. This pattern indicates that fraudulent
+behavior may cluster around extreme transaction amounts.The skewness
+suggests that a log-transformation or nonlinear modeling (via GAM) can
+help stabilize variance and capture the curved fraud risk pattern across
+transaction sizes.
+
+```{r}
+library(tidyverse)
+
+# Load dataset
+fraud_data <- read.csv("synthetic_fraud_dataset.csv")
+
+# Add transaction index for x-axis
+fraud_data <- fraud_data %>%
+  mutate(Transaction_ID_Index = row_number())
+
+# Scatterplot: Transaction Amount
+ggplot(fraud_data, aes(x = Transaction_ID_Index, y = Transaction_Amount)) +
+  geom_point(alpha = 0.5, color = "steelblue") +
+  labs(title = "Scatterplot of Transaction Amount",
+       x = "Transaction Index",
+       y = "Transaction Amount") +
+  theme_light()
+
+```
+
+**Distribution of Account Balance**
+
+The graph confirms that Transaction Balance has a right-skewed
+distribution with outliers, highlighting that transformations and/or
+nonlinear models are appropriate for predictive modeling or analysis. A
+few customers maintain unusually large balances, which may distort
+linear relationships. GAMs can model such effects smoothly without
+assuming proportional risk changes per unit increase in balance.
+
+```{r}
+
+library(tidyverse)
+
+# Sample data
+fraud_data <- tibble(
+  Time = 1:10,  # numeric instead of character
+  TransactionDistance = c(0.5, 2.0, 1.5, 3.5, 0.2, 4.0, 2.5, 1.0, 3.0, 0.8)
+)
+
+# Line chart
+ggplot(fraud_data, aes(x = Time, y = TransactionDistance)) +
+  geom_line(color = "steelblue", size = 1.2) +
+  geom_point(color = "darkblue", size = 2) +
+  labs(title = "Transaction Distance Over Time", x = "Transaction", y = "Distance") +
+  theme_light()
+
+```
+
+**Distribution of Transaction Distance**
+
+This variable typically shows sudden spikes (e.g., T4 or T6) could
+signal fraud —especially if the user typically transacts locally, High
+variability might mean the account is being used in multiple locations,
+possibly by different people. Some outliers represent geographically
+distant purchases. Long-distance transactions are often riskier, but the
+relationship isn’t linear. Fraud likelihood may rise sharply beyond a
+certain threshold, again supporting GAM's flexible smoothing capability.
+
+```{r}
+##Scatter Plot: Risk Score Over Time
+# Sample data
+fraud_data_risk <- tibble(
+  Time = paste0("T", 1:10),
+  RiskScore = c(0.1, 0.8, 0.3, 0.95, 0.2, 0.7, 0.4, 0.15, 0.9, 0.25)
+)
+
+# Scatter plot
+ggplot(fraud_data_risk, aes(x = Time, y = RiskScore)) +
+  geom_point(color = "darkblue", size = 3) +
+  geom_line(color = "darkblue", linetype = "dashed") +
+  labs(title = "Risk Score Over Time", x = "Transaction", y = "Risk Score") +
+  theme_light()
+```
+
+**Distribution of Risk Score**
+
+Risk Scores usually appear approximately normal or slightly
+right-skewed, depending on the scoring algorithm. Higher scores (e.g.,
+\> 0.7) are more likely to be flagged as fraudulent. Clusters of high
+scores (e.g., T4, T9) may indicate a pattern of risky behavior..Low
+scores (e.g., T1, T8) suggest safe transactions — useful for training
+models to distinguish fraud. This variable may already be well-scaled,
+but its relationship with fraud probability could still be nonlinear
+(e.g., steep risk increase beyond a mid-range threshold).
+
+```{r}
+library(tidyverse)
+library(lubridate)
+
+# Load dataset
+fraud_data <- read.csv("synthetic_fraud_dataset.csv")
+
+# Convert Timestamp to date, calculate Transaction Year and Issuance Year, exclude NAs
+fraud_data <- fraud_data %>%
+  mutate(
+    Timestamp = ymd_hms(Timestamp),               # adjust if format differs
+    Transaction_Year = year(Timestamp),
+    Issuance_Year = Transaction_Year - Card_Age
+  ) %>%
+  filter(!is.na(Issuance_Year), !is.na(Card_Age))  # remove rows with NA
+
+# Bin Issuance Year into 5-year ranges and drop unused NA factor levels
+fraud_data <- fraud_data %>%
+  mutate(
+    Issuance_Year_Bin = cut(Issuance_Year,
+                             breaks = seq(2000, 2025, by = 5),
+                             right = FALSE,
+                             labels = c("2000-2004","2005-2009","2010-2014","2015-2019","2020-2024"))
+  ) %>%
+  filter(!is.na(Issuance_Year_Bin))  # drop any rows that fall outside the bins
+
+# Histogram
+ggplot(fraud_data, aes(x = Issuance_Year_Bin)) +
+  geom_bar(fill = "steelblue", color = "white") +
+  labs(title = "Card Age Distribution by Issuance Year Range",
+       x = "Card Issuance Year Range",
+       y = "Count") +
+  theme_light()
+
+
+```
+
+**Distribution of Card Age**
+
+Card age tends to show a left-skewed distribution — many cards are
+relatively new, with fewer older cards. Older cards (e.g., issued in
+2015–2017) may be more vulnerable if security features are
+outdated.Newer cards (e.g., 2023–2024) might show different usage
+patterns — possibly more digital or mobile transactions.Peaks in certain
+years could reflect onboarding campaigns or fraud targeting specific
+cohorts.This suggests that fraud risk may vary by card maturity: new
+cards could face higher risk due to unfamiliar usage patterns. GAM’s
+smooth terms can model such non-monotonic age–fraud relationships.
+
+```{r}
+library(tidyverse)
+# Load dataset
+fraud_data <- read.csv("synthetic_fraud_dataset.csv")
+# Ensure Fraud_Label is numeric (0/1)
+fraud_data <- fraud_data %>%
+  mutate(Fraud_Label = as.numeric(Fraud_Label))
+
+# Nonlinearity check: Transaction Amount vs Fraud Probability
+ggplot(fraud_data, aes(x = Transaction_Amount, y = Fraud_Label)) +
+  geom_smooth(method = "loess", se = FALSE, color = "darkblue") +
+  labs(title = "Relationship Between Transaction Amount and Fraud Probability",
+       x = "Transaction Amount",
+       y = "Fraud Probability") +
+  theme_light()
+```
+
+**Non-linearity Check**
+
+The plot shows a nonlinear relationship between transaction amount and
+fraud probability, supporting the use of GAM's to flexibly model such
+effects. Transaction amount is a key continuous predictor, illustrating
+the need for a flexible approach before analyzing the full set of
+variables.
+
 ### Modeling and Results
 
 ## Conclusion
