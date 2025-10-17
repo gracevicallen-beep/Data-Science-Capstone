@@ -7,6 +7,7 @@ format:
   html:
     code-fold: true       # Allows folding of code chunks
     self-contained: true  # Packages images and CSS in the HTML
+    toc: true 
 output-dir: report1      # Folder where rendered HTML will go
 bibliography: references.bib
 csl: apa.csl 
@@ -136,6 +137,55 @@ for fraud detection.
 
 ## Methods
 
+Generalized Additive Models (GAMs) extend traditional regression by
+allowing flexible, nonlinear relationships between predictors and the
+response variable. In the context of fraud detection, GAMs model the
+probability that a transaction is fraudulent as a smooth and
+interpretable function of key predictors such as transaction amount,
+account activity, and time of day. Continuous variables are represented
+with spline-based smooth functions to capture nonlinear patterns, while
+categorical variables are incorporated as factors. The model is fitted
+using the `mgcv` package in R, which applies penalized regression
+splines and generalized cross-validation (GCV) to optimize smoothness
+and prevent overfitting [@Wood_2017]. After fitting, the smooth terms
+illustrate how each variable influences fraud likelihood, enabling
+visual interpretation of complex effects. Model performance is then
+evaluated using metrics such as AUC, accuracy, and recall, and the
+trained model is applied to the test dataset to identify fraudulent
+transactions.
+
+The overall modeling process is summarized in the flow chart below,
+which outlines the key steps from data preparation through model
+evaluation and interpretation.
+
+```{mermaid}
+
+%%{init: {'theme': 'base', 'themeVariables': { 
+  'background': '#FAFAF5',
+  'primaryColor': '#4682B4',
+  'secondaryColor': '#1E3A8A',
+  'lineColor': '#1E3A8A',
+  'nodeBorder': '#1E3A8A',
+  'primaryTextColor': '#FFFFFF',
+  'textColor': '#191970',
+  'fontSize': '12px',
+  'width': '100%'
+}}}%%
+
+flowchart TB
+A["Data Preparation<br/>- Clean data<br/>- Encode categorical variables"] --> B["Exploratory Data Analysis<br/>- Check distributions<br/>- Identify predictors"]
+B --> C["Split Data<br/>- Train/Test sets<br/>- Stratify by fraud outcome"]
+C --> D["Specify GAM Model<br/>- Select predictors<br/>- Define smooth terms<br/>- Family = binomial"]
+D --> E["Fit Model<br/>mgcv::gam(...)"]
+E --> F["Evaluate Model<br/>- ROC/AUC<br/>- Confusion Matrix"]
+F --> G["Interpret Results<br/>- Plot smooth effects"]
+G --> H["Predict New Data<br/>- Apply model to test or new cases"]
+
+style H fill:#FF4C4C,stroke:#8B0000,color:#FFFFFF
+```
+
+### Equation
+
 Formally, a GAM can be expressed as:
 
 $$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
@@ -151,6 +201,10 @@ methods, which can become computationally intensive and difficult to
 interpret. The additive smooth functions $s_j(X_j)$ are at the heart of
 GAMs, enabling the model to uncover nonlinear patterns while maintaining
 interpretability for each predictor.
+
+### Assumptions
+
+### Sample Data
 
 ## Analysis and Results
 
@@ -189,8 +243,8 @@ The dataset simulates real-world financial transaction patterns,
 capturing diverse user behaviors and transaction characteristics while
 ensuring ethical data usage through its synthetic design. It is tailored
 for binary classification tasks, with transactions labeled as fraudulent
-(1) or non-fraudulent (0), and includes 21 features categorized as
-follows:
+(1) or non-fraudulent (0), and includes 50,000 rows of data with 21
+features categorized as follows:
 
 -   Size and Scope: Contains thousands of individual transactions, each
     labeled as either fraudulent (1) or non-fraudulent (0).
@@ -221,6 +275,7 @@ models (e.g., XGBoost).
 #### **Visualizations**
 
 ```{r}
+
 # Load libraries
 library(tidyverse)
 library(janitor)
@@ -352,100 +407,39 @@ plot_list[[5]]  # Transaction_Amount appears last
 
 ```
 
-**Distribution of Transaction Amount**
+**Distribution of Numeric Variables**
 
-The histogram shows a strong right-skewed distribution — most
-transactions involve small amounts, while a few high-value transactions
-exist on the far right tail. This pattern indicates that fraudulent
-behavior may cluster around extreme transaction amounts.The skewness
-suggests that a log-transformation or nonlinear modeling (via GAM) can
-help stabilize variance and capture the curved fraud risk pattern across
-transaction sizes.
+The transaction amount histogram shows a strong right-skewed
+distribution. Most transactions involve small amounts, while a few
+high-value transactions exist on the far right tail. This pattern
+indicates that fraudulent behavior may cluster around extreme
+transaction amounts.The skewness suggests that a log-transformation or
+nonlinear modeling (via GAM) can help stabilize variance and capture the
+curved fraud risk pattern across transaction sizes.
 
 ```{r}
-library(tidyverse)
-
-# Load dataset
-fraud_data <- read.csv("synthetic_fraud_dataset.csv")
-
-# Add transaction index for x-axis
-fraud_data <- fraud_data %>%
-  mutate(Transaction_ID_Index = row_number())
-
-# Scatterplot: Transaction Amount
-ggplot(fraud_data, aes(x = Transaction_ID_Index, y = Transaction_Amount)) +
-  geom_point(alpha = 0.5, color = "steelblue") +
-  labs(title = "Scatterplot of Transaction Amount",
-       x = "Transaction Index",
-       y = "Transaction Amount") +
-  theme_light()
+ggplot(fraud_data, aes(x = as.factor(Fraud_Label), y = Risk_Score, fill = as.factor(Fraud_Label))) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("0" = "steelblue", "1" = "red"),
+                    name = "Fraud Label",
+                    labels = c("Legit", "Fraud")) +
+  labs(title = "Distribution of Risk Scores by Fraud Label",
+       x = "Fraud Label",
+       y = "Risk Score") +
+  theme_light() +
+  theme(legend.position = "none")
 
 ```
 
-**Distribution of Account Balance**
+**Distribution of Risk Scores**
 
-The graph confirms that Transaction Balance has a right-skewed
-distribution with outliers, highlighting that transformations and/or
-nonlinear models are appropriate for predictive modeling or analysis. A
-few customers maintain unusually large balances, which may distort
-linear relationships. GAMs can model such effects smoothly without
-assuming proportional risk changes per unit increase in balance.
-
-```{r}
-
-library(tidyverse)
-
-# Sample data
-fraud_data <- tibble(
-  Time = 1:10,  # numeric instead of character
-  TransactionDistance = c(0.5, 2.0, 1.5, 3.5, 0.2, 4.0, 2.5, 1.0, 3.0, 0.8)
-)
-
-# Line chart
-ggplot(fraud_data, aes(x = Time, y = TransactionDistance)) +
-  geom_line(color = "steelblue", size = 1.2) +
-  geom_point(color = "darkblue", size = 2) +
-  labs(title = "Transaction Distance Over Time", x = "Transaction", y = "Distance") +
-  theme_light()
-
-```
-
-**Distribution of Transaction Distance**
-
-This variable typically shows sudden spikes (e.g., T4 or T6) could
-signal fraud —especially if the user typically transacts locally, High
-variability might mean the account is being used in multiple locations,
-possibly by different people. Some outliers represent geographically
-distant purchases. Long-distance transactions are often riskier, but the
-relationship isn’t linear. Fraud likelihood may rise sharply beyond a
-certain threshold, again supporting GAM's flexible smoothing capability.
-
-```{r}
-##Scatter Plot: Risk Score Over Time
-# Sample data
-fraud_data_risk <- tibble(
-  Time = paste0("T", 1:10),
-  RiskScore = c(0.1, 0.8, 0.3, 0.95, 0.2, 0.7, 0.4, 0.15, 0.9, 0.25)
-)
-
-# Scatter plot
-ggplot(fraud_data_risk, aes(x = Time, y = RiskScore)) +
-  geom_point(color = "darkblue", size = 3) +
-  geom_line(color = "darkblue", linetype = "dashed") +
-  labs(title = "Risk Score Over Time", x = "Transaction", y = "Risk Score") +
-  theme_light()
-```
-
-**Distribution of Risk Score**
-
-Risk Scores usually appear approximately normal or slightly
-right-skewed, depending on the scoring algorithm. Higher scores (e.g.,
-\> 0.7) are more likely to be flagged as fraudulent. Clusters of high
-scores (e.g., T4, T9) may indicate a pattern of risky behavior..Low
-scores (e.g., T1, T8) suggest safe transactions — useful for training
-models to distinguish fraud. This variable may already be well-scaled,
-but its relationship with fraud probability could still be nonlinear
-(e.g., steep risk increase beyond a mid-range threshold).
+The boxplot shows the distribution of Risk_Score for fraudulent versus
+legitimate transactions. Fraudulent transactions generally have higher
+scores, with a higher median and upper quartile, while legitimate
+transactions cluster at lower values. This suggests that Risk_Score is a
+meaningful feature for distinguishing fraud. Using a GAM, we can
+formally test how Risk_Score relates to fraud, capturing potential
+non-linear effects in the data.
 
 ```{r}
 library(tidyverse)
