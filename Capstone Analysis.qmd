@@ -2,7 +2,7 @@
 title: "Generalized Additive Models in Fraud Detection and Pattern Recognition"
 subtitle: "Data Science Capstone Project"
 author: "Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou"
-date: "October 7, 2025"
+date: "October 21, 2025"
 format: 
   html:
     code-fold: true       # Allows folding of code chunks
@@ -203,6 +203,31 @@ GAMs, enabling the model to uncover nonlinear patterns while maintaining
 interpretability for each predictor.
 
 ### Assumptions
+
+-   The model assumes a link function that connects the predictors to
+    the response in a roughly linear way. For fraud detection, this
+    usually means using a logit link to model the chance of a
+    transaction being fraudulent.
+
+-   The effects of the predictors are additive. Each variable adds its
+    own influence, and the total prediction is the sum of those parts.
+
+-   Observations are independent, meaning one transaction does not
+    affect another. Each case stands on its own.
+
+-   The model assumes smooth changes in the relationships. When a
+    predictor changes, its effect on fraud risk changes gradually, not
+    suddenly.
+
+-   The response variable follows a known distribution. For this
+    project, it is assumed to be binomial since the outcome is either
+    fraud or not fraud.
+
+-   The smoothness settings and penalty values are chosen so the model
+    captures real trends without overfitting the data.
+
+-   Predictors are assumed to not be too strongly correlated with each
+    other so the model can estimate each variable’s effect clearly.
 
 ### Sample Data
 
