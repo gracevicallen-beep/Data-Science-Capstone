@@ -2,7 +2,7 @@
 title: "Generalized Additive Models in Fraud Detection and Pattern Recognition"
 subtitle: "Data Science Capstone Project"
 author: "Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou"
-date: "October 21, 2025"
+date: "October 31, 2025"
 format: 
   html:
     code-fold: true       # Allows folding of code chunks
@@ -541,6 +541,120 @@ the need for a flexible approach before analyzing the full set of
 variables.
 
 ### Modeling and Results
+
+**Plot 3 (Pingping - need to have title for types of graphs)**
+
+```{r}
+# Plot smooth terms
+library(mgcv)
+library(dplyr)
+#install.packages("caret")
+library(caret)
+data <- read.csv("synthetic_fraud_dataset.csv")
+gam_model <- gam(Fraud_Label ~ 
+                   Merchant_Category + 
+                   Is_Weekend + 
+                   s(Transaction_Amount) + 
+                   s(Account_Balance) + 
+                   s(Card_Age),
+                 family = binomial(link = "logit"),
+                 data = data)
+
+
+plot(gam_model, pages = 1, se = TRUE, rug = TRUE, shade = FALSE)
+
+# Predict probabilities
+data$pred_prob <- predict(gam_model, type = "response")  # Generate predicted probabilities
+
+# Convert probabilities to class labels (threshold = 0.5)
+data$pred_class <- ifelse(data$pred_prob > 0.5, 1, 0)
+
+# Confusion matrix (use Fraud_Label as reference)
+confusionMatrix(factor(data$pred_class), factor(data$Fraud_Label), positive = "1")
+
+
+
+```
+
+The plots illustrate how each predictor variable influences the response
+in a Generalized Additive Model. Transaction_Amount shows a clear
+positive relationship, meaning higher amounts are associated with a
+stronger effect on the outcome. In contrast, both Account_Balance and
+Card_Age display relatively flat smooth functions, indicating minimal or
+negligible impact on the response. The confidence intervals around each
+line suggest the model is confident in these estimates, especially for
+the strong effect of Transaction_Amount.
+
+If the curve for a feature, like Transaction_Amount, is above the zero
+line, that transaction amount is contributing to a higher risk of fraud;
+conversely, if the curve is below the line, it indicates a lower risk.
+The wider the gray shaded band, the less certain the model is about that
+relationship, often due to fewer data points in that range. Ultimately,
+these smooth, non-linear curves visualize the exact risk profile of each
+continuous variable, which is the core benefit of using a GAM.
+
+**Grace draft**
+
+```{r message=FALSE, warning=FALSE}
+# Load packages
+library(mgcv)
+library(ggplot2)
+library(dplyr)
+library(broom)
+
+# Read in your data
+fraud_data <- read.csv("synthetic_fraud_dataset.csv")
+
+# Make sure Fraud_Label is numeric (0 = legit, 1 = fraud)
+fraud_data <- fraud_data %>%
+  mutate(Fraud_Label = as.numeric(Fraud_Label))
+
+# Fit the Generalized Additive Model (GAM)
+risk_gam <- gam(Fraud_Label ~ s(Risk_Score),
+                data = fraud_data,
+                family = binomial(link = "logit"))
+
+# Tidy model summary (clean output)
+gam_summary <- tidy(risk_gam, parametric = TRUE)
+smooth_summary <- tidy(risk_gam, parametric = FALSE)
+
+# Display nice summaries
+knitr::kable(gam_summary, caption = "Parametric Terms in GAM Model")
+knitr::kable(smooth_summary, caption = "Smooth Terms in GAM Model")
+
+# Predicted probabilities
+fraud_data <- fraud_data %>%
+  mutate(predicted_prob = predict(risk_gam, type = "response"))
+
+# Visualization: Predicted probability by Risk Score
+ggplot(fraud_data, aes(x = Risk_Score, y = predicted_prob)) +
+  geom_point(alpha = 0.3, color = "steelblue") +
+  geom_smooth(se = TRUE, color = "red", linewidth = 1) +
+  labs(title = "Predicted Probability of Fraud by Risk Score (GAM)",
+       x = "Risk Score",
+       y = "Predicted Probability of Fraud") +
+  theme_light(base_size = 13) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+```
+
+**GAM Analysis of Risk Score and Fraud Probability**
+
+The generalized additive model (GAM) was used to examine how
+`Risk_Score` influences the probability of fraud. The parametric term
+(intercept) represents the baseline fraud probability when `Risk_Score`
+is zero, which is approximately 87% in this dataset, and is
+statistically significant (p ≈ 0). The smooth term `s(Risk_Score)`
+captures the potentially nonlinear relationship between risk score and
+fraud probability, with an estimated degrees of freedom of \~9 and a
+highly significant p-value (0), indicating that `Risk_Score` is a strong
+predictor of fraud. Visualization of the predicted probabilities shows
+that the fraud probability remains relatively steady across low-to-mid
+`Risk_Score` values, with minor nonlinear fluctuations, but increases
+sharply around a `Risk_Score` of approximately 0.75, highlighting a
+threshold effect. Together, these results demonstrate that higher risk
+scores are strongly associated with increased likelihood of fraud, and
+the GAM effectively captures both subtle patterns and nonlinear changes
+in this relationship.
 
 ## Conclusion
 
