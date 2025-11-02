@@ -542,7 +542,7 @@ variables.
 
 ### Modeling and Results
 
-**Plot 3 (Pingping - need to have title for types of graphs)**
+**Pingping  graphs**
 ```{r}
 library(mgcv)
 library(pROC)
@@ -789,7 +789,7 @@ scores are strongly associated with increased likelihood of fraud, and
 the GAM effectively captures both subtle patterns and nonlinear changes
 in this relationship.
 
-## Conclusion
+## Conclusion--**Pingping added**
 This project explored the application of Generalized Additive Models (GAMs) for fraud detection and pattern recognition using a large transactional dataset. GAMs provided a powerful balance between predictive performance and interpretability, allowing us to model complex nonlinear relationships between features such as transaction amount, transaction hour, account age, and prior transaction history. The model's smooth term visualizations offered clear insights into how each variable influenced the probability of fraud, making it especially valuable in high-stakes domains like finance where transparency and explainability are critical. The ROC curve confirms high discriminative power across thresholds, while the confusion matrix reveals a well-balanced classification profile—low false positives and false negatives, with high true positive and true negative rates. These results suggest that the model is not only statistically sound but also interpretable, which is critical for stakeholder trust and regulatory compliance. The use of smooth terms in GAMs allows for nuanced modeling of nonlinear relationships, while maintaining transparency in how predictions are made. The project also produced a comprehensive report with diagnostic plots, enabling stakeholders to visually assess model behavior and performance.
 Despite its strengths, the GAM approach has several limitations. First, it is sensitive to class imbalance, which is common in fraud detection; this can lead to poor recall for the minority class unless addressed through resampling or threshold tuning. Second, while GAMs are interpretable, they may underperform compared to more complex ensemble methods like gradient boosting or deep learning in terms of raw predictive power. Third, scalability can become a concern with extremely large datasets, where mgcv::gam() may struggle with memory or computation time. Additionally, categorical variables with high cardinality (e.g., location or device type) may require careful preprocessing or dimensionality reduction to avoid overfitting or convergence issues.
 Looking ahead, the integration of GAMs into real-time fraud detection systems presents a promising avenue, especially when paired with streaming data platforms and online learning techniques. Forecasting future developments, we anticipate a growing emphasis on hybrid models that combine the interpretability of GAMs with the predictive strength of machine learning algorithms. For example, GAMs could be used for feature engineering or as interpretable surrogates for black-box models. Moreover, as regulatory frameworks like GDPR and AI transparency mandates become more stringent, the demand for explainable models in fraud detection is expected to rise.
