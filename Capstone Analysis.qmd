@@ -590,6 +590,8 @@ gam_mod <- gam(
   method = "REML",
   select = TRUE
 )
+cat("\n=== MODEL SUMMARY ===\n")
+print(summary(gam_mod))
 ## 4. Predictions & ROC -----------------------------------------
 test_prob <- predict(gam_mod, test, type = "response")
 roc_obj   <- roc(test$Fraud_Label, test_prob, quiet = TRUE)
@@ -628,6 +630,54 @@ The ROC Curve for the GAM Fraud Detector provides a comprehensive view of the mo
 library(caret)
 library(dplyr)
 library(ggplot2)
+library(mgcv)
+library(pROC)
+library(caret)
+library(dplyr)
+library(ggplot2)
+library(scales)
+## 1. Load & Clean Data
+df <- read.csv("synthetic_fraud_dataset.csv", stringsAsFactors = FALSE)
+df <- df %>%
+  mutate(
+    across(c(Transaction_Type, Device_Type, Location, Merchant_Category,
+             Card_Type, Authentication_Method, IP_Address_Flag,
+             Previous_Fraudulent_Activity, Is_Weekend), factor),
+    Fraud_Label = factor(Fraud_Label, levels = c(0,1))
+  ) %>%
+  select(-Transaction_ID, -User_ID, -Timestamp)
+## 2. Train / Test Split 
+set.seed(123)
+train_idx <- createDataPartition(df$Fraud_Label, p = .70, list = FALSE)
+train <- df[train_idx, ]
+test  <- df[-train_idx, ]
+## 3. Fit GAM (FIXED: smart k + select=TRUE)
+gam_mod <- gam(
+  Fraud_Label ~
+    s(Transaction_Amount,           k = 50) +
+    Transaction_Type +
+    s(Account_Balance,             k = 50) +
+    Device_Type +
+    Location +
+    Merchant_Category +
+    IP_Address_Flag +
+    Previous_Fraudulent_Activity +
+    s(Daily_Transaction_Count,     k = 10) +
+    s(Avg_Transaction_Amount_7d,   k = 50) +
+    s(Failed_Transaction_Count_7d, k = 5)  +
+    Card_Type +
+    s(Card_Age,                    k = 50) +
+    s(Transaction_Distance,        k = 50) +
+    Authentication_Method +
+    s(Risk_Score,                  k = 50) +
+    Is_Weekend,
+  family = binomial,
+  data = train,
+  method = "REML",
+  select = TRUE
+)
+cat("\n=== MODEL SUMMARY ===\n")
+print(summary(gam_mod)) 
 
 # Assume you already have:
 # - true labels: test$Fraud_Label
