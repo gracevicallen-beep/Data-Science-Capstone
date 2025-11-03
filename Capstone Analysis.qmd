@@ -542,11 +542,15 @@ variables.
 
 ### Modeling and Results
 
-**Pingping  graphs**
+**Pingping graphs**
+
 ```{r}
 ##Confusion Matrix
 ##Install once: 
-install.packages(c("mgcv","pROC","caret","dplyr","ggplot2","scales"))
+#install.packages(
+#  c("mgcv", "pROC", "caret", "dplyr", "ggplot2", "scales"),
+  repos = "https://cloud.r-project.org"
+#)
 
 library(mgcv)
 library(pROC)
@@ -597,9 +601,6 @@ gam_model <- gam(
   method = "REML"
 )
 
-# Output summary to check p-value condition (< 0.001) for smooth terms
-cat("\n*** GAM Model Summary (Check P-value < 0.001) ***\n")
-print(summary(gam_model))
 
 # ------------------------------------------------
 # 5. Prediction and AUC Calculation
@@ -611,9 +612,6 @@ test_probabilities <- predict(gam_model, newdata = test_data, type = "response")
 roc_obj <- roc(test_data$Fraud_Label, test_probabilities)
 auc_value <- auc(roc_obj)
 
-cat("\n*** AUC Result ***\n")
-cat("AUC for GAM Model:", round(auc_value, 4), "\n")
-cat("Condition (AUC > 0.8) Met:", auc_value > 0.8, "\n")
 
 # ------------------------------------------------
 # 6. Confusion Matrix and Balanced Accuracy
@@ -623,12 +621,6 @@ cat("Condition (AUC > 0.8) Met:", auc_value > 0.8, "\n")
 predicted_classes <- factor(ifelse(test_probabilities > 0.5, 1, 0), levels = c(0, 1))
 cm <- confusionMatrix(predicted_classes, test_data$Fraud_Label, positive = "1")
 balanced_accuracy <- cm$byClass["Balanced Accuracy"]
-
-cat("\n*** Balanced Accuracy Result ***\n")
-cat("Balanced Accuracy:", round(balanced_accuracy, 4), "\n")
-cat("Condition (Balanced Accuracy > 0.8) Met:", balanced_accuracy > 0.8, "\n")
-cat("\nConfusion Matrix:\n")
-print(cm)
 
 # Prepare data for plotting
 cm_table <- as.data.frame(cm$table)
@@ -652,17 +644,26 @@ ggsave("Confusion_Matrix.png", plot = p_cm, width = 7, height = 6, dpi = 300)
 # ------------------------------------------------
 # 8. Final Output
 # ------------------------------------------------
-cat("\n=== Model Performance ===\n")
-cat("AUC:", round(auc_value, 4), "\n")
-cat("Balanced Accuracy:", round(cm$byClass["Balanced Accuracy"], 4), "\n")
-cat("Check GAM summary for p-value < 0.001 condition.\n")
 
 ```
-The confusion matrix for the GAM Fraud Detector provides a detailed snapshot of the model’s classification outcomes at a fixed threshold, typically 0.5. It breaks down predictions into four categories: true positives (fraud correctly identified), false positives (non-fraud incorrectly flagged as fraud), true negatives (non-fraud correctly identified), and false negatives (fraud missed by the model). This matrix helps quantify the model’s accuracy, sensitivity, and specificity, which are crucial in fraud detection where class imbalance is common. The visualization enhances interpretability by showing both raw counts and percentages, allowing quick assessment of how well the model balances detection and error. The inclusion of balanced accuracy further accounts for uneven class distribution, offering a fairer measure of overall performance.
+
+The confusion matrix for the GAM Fraud Detector provides a detailed
+snapshot of the model’s classification outcomes at a fixed threshold,
+typically 0.5. It breaks down predictions into four categories: true
+positives (fraud correctly identified), false positives (non-fraud
+incorrectly flagged as fraud), true negatives (non-fraud correctly
+identified), and false negatives (fraud missed by the model). This
+matrix helps quantify the model’s accuracy, sensitivity, and
+specificity, which are crucial in fraud detection where class imbalance
+is common. The visualization enhances interpretability by showing both
+raw counts and percentages, allowing quick assessment of how well the
+model balances detection and error. The inclusion of balanced accuracy
+further accounts for uneven class distribution, offering a fairer
+measure of overall performance.
 
 ```{r}
 # Install once: 
-install.packages(c("mgcv","pROC","caret","dplyr","ggplot2","scales"))
+#install.packages(c("mgcv","pROC","caret","dplyr","ggplot2","scales"))
 
 library(mgcv)
 library(pROC)
@@ -741,12 +742,24 @@ p_roc <- ggplot(roc_df, aes(x = fpr, y = tpr)) +
 print(p_roc)
 ggsave("ROC_Curve.png", width = 8, height = 8, dpi = 300) # This saves the plot!
 
-cat("\nAUC:", round(auc_val, 4), "\n")
-
 ```
 
-The ROC Curve for the GAM Fraud Detector provides a comprehensive view of the model’s classification performance across all possible threshold values. It plots the True Positive Rate (Sensitivity) against the False Positive Rate (1 - Specificity), allowing you to assess how well the model distinguishes between fraudulent and non-fraudulent transactions. In this case, the curve arcs significantly above the diagonal line that represents random guessing, indicating strong discriminative power. The Area Under the Curve (AUC) is 0.92 which is considered excellent and suggests that the model correctly ranks a randomly chosen fraudulent transaction higher than a non-fraudulent one over 92% of the time. A dashed vertical line at a threshold of approximately 0.34 marks a selected operating point, helping visualize the trade-off between catching more frauds (higher sensitivity) and avoiding false alarms (lower false positive rate). This curve is especially valuable in fraud detection, where balancing sensitivity and specificity is critical due to the typically imbalanced nature of the data.
-
+The ROC Curve for the GAM Fraud Detector provides a comprehensive view
+of the model’s classification performance across all possible threshold
+values. It plots the True Positive Rate (Sensitivity) against the False
+Positive Rate (1 - Specificity), allowing you to assess how well the
+model distinguishes between fraudulent and non-fraudulent transactions.
+In this case, the curve arcs significantly above the diagonal line that
+represents random guessing, indicating strong discriminative power. The
+Area Under the Curve (AUC) is 0.92 which is considered excellent and
+suggests that the model correctly ranks a randomly chosen fraudulent
+transaction higher than a non-fraudulent one over 92% of the time. A
+dashed vertical line at a threshold of approximately 0.34 marks a
+selected operating point, helping visualize the trade-off between
+catching more frauds (higher sensitivity) and avoiding false alarms
+(lower false positive rate). This curve is especially valuable in fraud
+detection, where balancing sensitivity and specificity is critical due
+to the typically imbalanced nature of the data.
 
 ```{r}
 # Plot smooth terms
@@ -786,7 +799,7 @@ relationship, often due to fewer data points in that range. Ultimately,
 these smooth, non-linear curves visualize the exact risk profile of each
 continuous variable, which is the core benefit of using a GAM.
 
-**Grace draft**
+**Grace graph**
 
 ```{r message=FALSE, warning=FALSE}
 # Load packages
@@ -849,10 +862,59 @@ scores are strongly associated with increased likelihood of fraud, and
 the GAM effectively captures both subtle patterns and nonlinear changes
 in this relationship.
 
-## Conclusion--**Pingping added**
-This project explored the application of Generalized Additive Models (GAMs) for fraud detection and pattern recognition using a large transactional dataset. GAMs provided a powerful balance between predictive performance and interpretability, allowing us to model complex nonlinear relationships between features such as transaction amount, transaction hour, account age, and prior transaction history. The model's smooth term visualizations offered clear insights into how each variable influenced the probability of fraud, making it especially valuable in high-stakes domains like finance where transparency and explainability are critical. The ROC curve confirms high discriminative power across thresholds, while the confusion matrix reveals a well-balanced classification profile—low false positives and false negatives, with high true positive and true negative rates. These results suggest that the model is not only statistically sound but also interpretable, which is critical for stakeholder trust and regulatory compliance. The use of smooth terms in GAMs allows for nuanced modeling of nonlinear relationships, while maintaining transparency in how predictions are made. The project also produced a comprehensive report with diagnostic plots, enabling stakeholders to visually assess model behavior and performance.
-Despite its strengths, the GAM approach has several limitations. First, it is sensitive to class imbalance, which is common in fraud detection; this can lead to poor recall for the minority class unless addressed through resampling or threshold tuning. Second, while GAMs are interpretable, they may underperform compared to more complex ensemble methods like gradient boosting or deep learning in terms of raw predictive power. Third, scalability can become a concern with extremely large datasets, where mgcv::gam() may struggle with memory or computation time. Additionally, categorical variables with high cardinality (e.g., location or device type) may require careful preprocessing or dimensionality reduction to avoid overfitting or convergence issues.
-Looking ahead, the integration of GAMs into real-time fraud detection systems presents a promising avenue, especially when paired with streaming data platforms and online learning techniques. Forecasting future developments, we anticipate a growing emphasis on hybrid models that combine the interpretability of GAMs with the predictive strength of machine learning algorithms. For example, GAMs could be used for feature engineering or as interpretable surrogates for black-box models. Moreover, as regulatory frameworks like GDPR and AI transparency mandates become more stringent, the demand for explainable models in fraud detection is expected to rise.
-Emerging trends in fraud analytics also point toward the incorporation of temporal dynamics, behavioral biometrics, and network-based features to capture evolving fraud patterns. The use of graph-based anomaly detection, time-aware modeling, and unsupervised learning techniques is gaining traction, especially in detecting sophisticated fraud rings and adaptive adversaries. In this context, GAMs can serve as a foundational layer in a broader ensemble or multi-model architecture, offering both clarity and adaptability. As fraudsters continue to innovate, the future of fraud detection will hinge on models that are not only accurate but also interpretable, scalable, and responsive to change.
+## Conclusion
+
+**Pingping added:**
+
+This project explored the application of Generalized Additive Models
+(GAMs) for fraud detection and pattern recognition using a large
+transactional dataset. GAMs provided a powerful balance between
+predictive performance and interpretability, allowing us to model
+complex nonlinear relationships between features such as transaction
+amount, transaction hour, account age, and prior transaction history.
+The model's smooth term visualizations offered clear insights into how
+each variable influenced the probability of fraud, making it especially
+valuable in high-stakes domains like finance where transparency and
+explainability are critical. The ROC curve confirms high discriminative
+power across thresholds, while the confusion matrix reveals a
+well-balanced classification profile—low false positives and false
+negatives, with high true positive and true negative rates. These
+results suggest that the model is not only statistically sound but also
+interpretable, which is critical for stakeholder trust and regulatory
+compliance. The use of smooth terms in GAMs allows for nuanced modeling
+of nonlinear relationships, while maintaining transparency in how
+predictions are made. The project also produced a comprehensive report
+with diagnostic plots, enabling stakeholders to visually assess model
+behavior and performance. Despite its strengths, the GAM approach has
+several limitations. First, it is sensitive to class imbalance, which is
+common in fraud detection; this can lead to poor recall for the minority
+class unless addressed through resampling or threshold tuning. Second,
+while GAMs are interpretable, they may underperform compared to more
+complex ensemble methods like gradient boosting or deep learning in
+terms of raw predictive power. Third, scalability can become a concern
+with extremely large datasets, where mgcv::gam() may struggle with
+memory or computation time. Additionally, categorical variables with
+high cardinality (e.g., location or device type) may require careful
+preprocessing or dimensionality reduction to avoid overfitting or
+convergence issues. Looking ahead, the integration of GAMs into
+real-time fraud detection systems presents a promising avenue,
+especially when paired with streaming data platforms and online learning
+techniques. Forecasting future developments, we anticipate a growing
+emphasis on hybrid models that combine the interpretability of GAMs with
+the predictive strength of machine learning algorithms. For example,
+GAMs could be used for feature engineering or as interpretable
+surrogates for black-box models. Moreover, as regulatory frameworks like
+GDPR and AI transparency mandates become more stringent, the demand for
+explainable models in fraud detection is expected to rise. Emerging
+trends in fraud analytics also point toward the incorporation of
+temporal dynamics, behavioral biometrics, and network-based features to
+capture evolving fraud patterns. The use of graph-based anomaly
+detection, time-aware modeling, and unsupervised learning techniques is
+gaining traction, especially in detecting sophisticated fraud rings and
+adaptive adversaries. In this context, GAMs can serve as a foundational
+layer in a broader ensemble or multi-model architecture, offering both
+clarity and adaptability. As fraudsters continue to innovate, the future
+of fraud detection will hinge on models that are not only accurate but
+also interpretable, scalable, and responsive to change.
 
 ## References
