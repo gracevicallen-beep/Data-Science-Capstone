@@ -192,15 +192,16 @@ $$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
 
 where $g(\mu)$ is the link function (e.g., logit for binary outcomes or
 identity for continuous outcomes), $\alpha$ is the intercept, and
-$s_j(X_j)$ are smooth functions of the predictor variables $X_j$. This
-structure allows each predictor to contribute a smoothed effect to the
-model, capturing complex patterns in the data without obscuring the
-individual influence of each variable. By balancing flexibility and
-clarity, GAMs offer a practical alternative to fully nonparametric
-methods, which can become computationally intensive and difficult to
-interpret. The additive smooth functions $s_j(X_j)$ are at the heart of
-GAMs, enabling the model to uncover nonlinear patterns while maintaining
-interpretability for each predictor.
+$s_j(X_j)$ are smooth functions of the predictor variables $X_j$
+[@HalDa_2012]. This structure allows each predictor to contribute a
+smoothed effect to the model, capturing complex patterns in the data
+without obscuring the individual influence of each variable. By
+balancing flexibility and clarity, GAMs offer a practical alternative to
+fully nonparametric methods, which can become computationally intensive
+and difficult to interpret [@Hastie_Tibshirani_1990]. The additive
+smooth functions $s_j(X_j)$ are at the heart of GAMs, enabling the model
+to uncover nonlinear patterns while maintaining interpretability for
+each predictor [@HalDa_2012].
 
 ### Assumptions
 
@@ -213,7 +214,7 @@ interpretability for each predictor.
     own influence, and the total prediction is the sum of those parts.
 
 -   Observations are independent, meaning one transaction does not
-    affect another. Each case stands on its own.
+    affect another. Each case stands on its own [@Wood_2017].
 
 -   The model assumes smooth changes in the relationships. When a
     predictor changes, its effect on fraud risk changes gradually, not
@@ -227,9 +228,106 @@ interpretability for each predictor.
     captures real trends without overfitting the data.
 
 -   Predictors are assumed to not be too strongly correlated with each
-    other so the model can estimate each variable’s effect clearly.
+    other so the model can estimate each variable’s effect
+    clearly[@Hastie_1986].
 
-### Sample Data
+### Justification of Model Choice
+
+The decision to employ Generalized Additive Models (GAMs) for our fraud
+detection project is rooted in the balance they strike between
+predictive flexibility, interpretability, and statistical rigor. Fraud
+detection is inherently complex—characterized by nonlinear
+relationships, rare event occurrence, and high stakes for
+interpretability. GAMs offer a framework capable of addressing each of
+these challenges simultaneously.
+
+**Alignment with Fraud Data Characteristics**
+
+Fraudulent transaction data typically exhibits nonlinear effects among
+predictors such as transaction amount, account balance, risk score, and
+temporal activity. For example, the probability of fraud may increase
+sharply after a certain transaction threshold, level off, or even
+decline depending on contextual factors such as account age or device
+type. Linear models cannot adequately capture these curved relationships
+without arbitrary transformations. GAMs, however, model each predictor’s
+contribution using smooth spline functions, automatically discovering
+and fitting nonlinearities without overcomplicating the model.
+
+Moreover, the class imbalance—where fraudulent cases form only a small
+fraction of all transactions—necessitates models that can generalize
+patterns efficiently from limited fraud instances. GAMs achieve this
+through penalized regression splines, which impose smoothness penalties
+to prevent overfitting on rare classes, ensuring robust generalization
+while maintaining interpretability [@Wood_2017].
+
+**Interpretability and Transparency**
+
+Fraud detection models must be explainable to auditors, analysts, and
+regulators. Unlike opaque machine learning methods such as neural
+networks or random forests, GAMs yield interpretable visualizations that
+display how each feature individually affects the probability of fraud.
+Each smooth function corresponds to a single variable, allowing
+stakeholders to see whether increasing a risk score or transaction
+amount leads to higher or lower fraud probability, and by how much.
+
+This transparency is especially important in financial compliance
+contexts governed by frameworks like the General Data Protection
+Regulation (GDPR) and AI transparency mandates. GAMs not only provide
+strong predictive performance but also deliver insights that can be
+communicated clearly to non-technical decision-makers—an essential
+criterion for real-world fraud prevention systems.
+
+**Theoretical and Practical Advantages**
+
+From a methodological standpoint, GAMs extend the Generalized Linear
+Model (GLM) by relaxing its strict linearity assumption. By
+incorporating additive smooth functions, GAMs can flexibly adapt to
+real-world data structures without losing the interpretability inherent
+in regression-based frameworks. This makes them ideal for structured
+tabular data like financial transactions, where both continuous and
+categorical predictors interact in subtle, nonlinear ways.
+
+Practically, modern implementations such as the mgcv package in R (Wood,
+2025) offer efficient automatic smoothness estimation and robust fitting
+through Generalized Cross-Validation (GCV) [@Wood_2025]. This allows
+researchers to scale GAMs to large datasets like the Fraud Detection
+Transactions Dataset [@Ashar_2024] while maintaining computational
+efficiency and reliability.
+
+**Relevance to Fraud Analytics and Model Explainability**
+
+Fraud detection requires models that not only flag suspicious
+transactions but also justify why a transaction was classified as
+fraudulent. GAMs produce smooth risk curves for each variable, visually
+highlighting critical inflection points (e.g., transaction amounts where
+fraud risk sharply increases). These interpretable risk profiles allow
+investigators to understand and communicate why a transaction was deemed
+risky and bridge the gap between data science and operational fraud
+investigation.
+
+Recent studies have demonstrated that GAMs perform strongly in similar
+domains. For instance, @Tragouda_2024 reported high recall rates in bank
+cheque fraud detection using GAMs, while @Brossart_2015 showed how GAMs
+enhanced auditor confidence in identifying irregular financial records.
+The interpretability-performance tradeoff they offer aligns perfectly
+with our project’s goal: developing a fraud model that is both
+statistically robust and operationally transparent.
+
+**Integration with Broader Fraud Detection Strategies**
+
+While deep learning and ensemble methods (e.g., gradient boosting) can
+outperform GAMs in raw predictive accuracy, they often sacrifice
+explainability—a crucial factor in regulated domains. GAMs can also
+serve as benchmark or surrogate models for complex black-box algorithms,
+providing interpretable approximations of feature effects. In our
+capstone, this balance allows us to maintain interpretability without
+disregarding performance metrics such as AUC and recall, where our GAM
+achieved strong results (AUC = 0.92).
+
+Generalized Additive Models provide an ideal modeling framework for
+fraud datasets and objectives. GAMs strike a balance between accuracy,
+interpretability, and accountability that is essential for effective,
+trustworthy fraud detection.
 
 ## Analysis and Results
 
@@ -542,7 +640,23 @@ variables.
 
 ### Modeling and Results
 
-**Pingping graphs**
+\*Pingping
+
+**Confusion Matrix**
+
+The confusion matrix for the GAM Fraud Detector provides a detailed
+snapshot of the model’s classification outcomes at a fixed threshold,
+typically 0.5. It breaks down predictions into four categories: true
+positives (fraud correctly identified), false positives (non-fraud
+incorrectly flagged as fraud), true negatives (non-fraud correctly
+identified), and false negatives (fraud missed by the model). This
+matrix helps quantify the model’s accuracy, sensitivity, and
+specificity, which are crucial in fraud detection where class imbalance
+is common. The visualization enhances interpretability by showing both
+raw counts and percentages, allowing quick assessment of how well the
+model balances detection and error. The inclusion of balanced accuracy
+further accounts for uneven class distribution, offering a fairer
+measure of overall performance.
 
 ```{r}
 ##Confusion Matrix
@@ -647,19 +761,24 @@ ggsave("Confusion_Matrix.png", plot = p_cm, width = 7, height = 6, dpi = 300)
 
 ```
 
-The confusion matrix for the GAM Fraud Detector provides a detailed
-snapshot of the model’s classification outcomes at a fixed threshold,
-typically 0.5. It breaks down predictions into four categories: true
-positives (fraud correctly identified), false positives (non-fraud
-incorrectly flagged as fraud), true negatives (non-fraud correctly
-identified), and false negatives (fraud missed by the model). This
-matrix helps quantify the model’s accuracy, sensitivity, and
-specificity, which are crucial in fraud detection where class imbalance
-is common. The visualization enhances interpretability by showing both
-raw counts and percentages, allowing quick assessment of how well the
-model balances detection and error. The inclusion of balanced accuracy
-further accounts for uneven class distribution, offering a fairer
-measure of overall performance.
+**ROC Curve**
+
+The ROC Curve for the GAM Fraud Detector provides a comprehensive view
+of the model’s classification performance across all possible threshold
+values. It plots the True Positive Rate (Sensitivity) against the False
+Positive Rate (1 - Specificity), allowing you to assess how well the
+model distinguishes between fraudulent and non-fraudulent transactions.
+In this case, the curve arcs significantly above the diagonal line that
+represents random guessing, indicating strong discriminative power. The
+Area Under the Curve (AUC) is 0.92 which is considered excellent and
+suggests that the model correctly ranks a randomly chosen fraudulent
+transaction higher than a non-fraudulent one over 92% of the time. A
+dashed vertical line at a threshold of approximately 0.34 marks a
+selected operating point, helping visualize the trade-off between
+catching more frauds (higher sensitivity) and avoiding false alarms
+(lower false positive rate). This curve is especially valuable in fraud
+detection, where balancing sensitivity and specificity is critical due
+to the typically imbalanced nature of the data.
 
 ```{r}
 # Install once: 
@@ -744,22 +863,24 @@ ggsave("ROC_Curve.png", width = 8, height = 8, dpi = 300) # This saves the plot!
 
 ```
 
-The ROC Curve for the GAM Fraud Detector provides a comprehensive view
-of the model’s classification performance across all possible threshold
-values. It plots the True Positive Rate (Sensitivity) against the False
-Positive Rate (1 - Specificity), allowing you to assess how well the
-model distinguishes between fraudulent and non-fraudulent transactions.
-In this case, the curve arcs significantly above the diagonal line that
-represents random guessing, indicating strong discriminative power. The
-Area Under the Curve (AUC) is 0.92 which is considered excellent and
-suggests that the model correctly ranks a randomly chosen fraudulent
-transaction higher than a non-fraudulent one over 92% of the time. A
-dashed vertical line at a threshold of approximately 0.34 marks a
-selected operating point, helping visualize the trade-off between
-catching more frauds (higher sensitivity) and avoiding false alarms
-(lower false positive rate). This curve is especially valuable in fraud
-detection, where balancing sensitivity and specificity is critical due
-to the typically imbalanced nature of the data.
+**GAM Analysis of Transaction Amount, Account Balance, and Card Age**
+
+The plots illustrate how each predictor variable influences the response
+in a Generalized Additive Model. Transaction_Amount shows a clear
+positive relationship, meaning higher amounts are associated with a
+stronger effect on the outcome. In contrast, both Account_Balance and
+Card_Age display relatively flat smooth functions, indicating minimal or
+negligible impact on the response. The confidence intervals around each
+line suggest the model is confident in these estimates, especially for
+the strong effect of Transaction_Amount.
+
+If the curve for a feature, like Transaction_Amount, is above the zero
+line, that transaction amount is contributing to a higher risk of fraud;
+conversely, if the curve is below the line, it indicates a lower risk.
+The wider the gray shaded band, the less certain the model is about that
+relationship, often due to fewer data points in that range. Ultimately,
+these smooth, non-linear curves visualize the exact risk profile of each
+continuous variable, which is the core benefit of using a GAM.
 
 ```{r}
 # Plot smooth terms
@@ -782,24 +903,26 @@ plot(gam_model, pages = 1, se = TRUE, rug = TRUE, shade = FALSE)
 
 ```
 
-The plots illustrate how each predictor variable influences the response
-in a Generalized Additive Model. Transaction_Amount shows a clear
-positive relationship, meaning higher amounts are associated with a
-stronger effect on the outcome. In contrast, both Account_Balance and
-Card_Age display relatively flat smooth functions, indicating minimal or
-negligible impact on the response. The confidence intervals around each
-line suggest the model is confident in these estimates, especially for
-the strong effect of Transaction_Amount.
+\*Grace
 
-If the curve for a feature, like Transaction_Amount, is above the zero
-line, that transaction amount is contributing to a higher risk of fraud;
-conversely, if the curve is below the line, it indicates a lower risk.
-The wider the gray shaded band, the less certain the model is about that
-relationship, often due to fewer data points in that range. Ultimately,
-these smooth, non-linear curves visualize the exact risk profile of each
-continuous variable, which is the core benefit of using a GAM.
+**GAM Analysis of Risk Score and Fraud Probability**
 
-**Grace graph**
+The generalized additive model (GAM) was used to examine how
+`Risk_Score` influences the probability of fraud. The parametric term
+(intercept) represents the baseline fraud probability when `Risk_Score`
+is zero, which is approximately 87% in this dataset, and is
+statistically significant (p ≈ 0). The smooth term `s(Risk_Score)`
+captures the potentially nonlinear relationship between risk score and
+fraud probability, with an estimated degrees of freedom of \~9 and a
+highly significant p-value (0), indicating that `Risk_Score` is a strong
+predictor of fraud. Visualization of the predicted probabilities shows
+that the fraud probability remains relatively steady across low-to-mid
+`Risk_Score` values, with minor nonlinear fluctuations, but increases
+sharply around a `Risk_Score` of approximately 0.75, highlighting a
+threshold effect. Together, these results demonstrate that higher risk
+scores are strongly associated with increased likelihood of fraud, and
+the GAM effectively captures both subtle patterns and nonlinear changes
+in this relationship.
 
 ```{r message=FALSE, warning=FALSE}
 # Load packages
@@ -842,25 +965,6 @@ ggplot(fraud_data, aes(x = Risk_Score, y = predicted_prob)) +
   theme_light(base_size = 13) +
   theme(plot.title = element_text(face = "bold", hjust = 0.5))
 ```
-
-**GAM Analysis of Risk Score and Fraud Probability**
-
-The generalized additive model (GAM) was used to examine how
-`Risk_Score` influences the probability of fraud. The parametric term
-(intercept) represents the baseline fraud probability when `Risk_Score`
-is zero, which is approximately 87% in this dataset, and is
-statistically significant (p ≈ 0). The smooth term `s(Risk_Score)`
-captures the potentially nonlinear relationship between risk score and
-fraud probability, with an estimated degrees of freedom of \~9 and a
-highly significant p-value (0), indicating that `Risk_Score` is a strong
-predictor of fraud. Visualization of the predicted probabilities shows
-that the fraud probability remains relatively steady across low-to-mid
-`Risk_Score` values, with minor nonlinear fluctuations, but increases
-sharply around a `Risk_Score` of approximately 0.75, highlighting a
-threshold effect. Together, these results demonstrate that higher risk
-scores are strongly associated with increased likelihood of fraud, and
-the GAM effectively captures both subtle patterns and nonlinear changes
-in this relationship.
 
 ## Conclusion
 
