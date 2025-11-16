@@ -531,14 +531,7 @@ plot_list[[5]]  # Transaction_Amount appears last
 ```
 
 **Distribution of Numeric Variables**
-
-The transaction amount histogram shows a strong right-skewed
-distribution. Most transactions involve small amounts, while a few
-high-value transactions exist on the far right tail. This pattern
-indicates that fraudulent behavior may cluster around extreme
-transaction amounts.The skewness suggests that a log-transformation or
-nonlinear modeling (via GAM) can help stabilize variance and capture the
-curved fraud risk pattern across transaction sizes.
+The histograms provide a visual overview of key variables used in fraud detection modeling, revealing important patterns that inform feature engineering and model selection. Most features—such as Account_Balance, Transaction_Distance, Risk_Score, and Card_Age—exhibit uniform distributions, indicating evenly spread values that are well-suited for capturing nonlinear effects in models like GAM. In contrast, Transaction_Amount shows a strong right-skewed distribution, with most transactions involving small amounts and a few high-value outliers concentrated in the far right tail. This skewed pattern suggests that fraudulent behavior may cluster around extreme transaction amounts, making this feature particularly predictive. To address the skewness and better model the curved fraud risk pattern across transaction sizes, a log-transformation or nonlinear modeling approach like GAM can help stabilize variance and enhance detection accuracy.
 
 ```{r}
 ggplot(fraud_data, aes(x = as.factor(Fraud_Label), y = Risk_Score, fill = as.factor(Fraud_Label))) +
