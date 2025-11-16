@@ -642,6 +642,26 @@ variables.
 
 \*Pingping
 
+**Model Overview**
+The model uses a Generalized Additive Model (GAM) to predict fraud probability in financial transactions. GAMs are particularly well-suited for fraud detection because they can capture non-linear relationships while maintaining interpretability—crucial for understanding which factors drive fraud risk.
+In this case, the GAM predicts the probability that a transaction is fraudulent by analyzing features such as transaction amount, account balance, card age, and risk score. The smooth functions in the GAM show how each variable contributes to fraud risk.Model diagnostics, including the confusion matrix and ROC curve, its ability to visually display how each variable influences fraud risk ensures the model remains interpretable and transparent for decision-making and compliance.
+
+**Primary Goal**
+To identify fraudulent transactions by analyzing patterns in transaction characteristics and assigning fraud probabilities. The model aims to maximize fraud detection (sensitivity) while minimizing false alarms (false positives), which is critical in financial fraud prevention.
+
+**Key Predictive Features**
+The GAM analyzes several variables to predict fraud:
+Risk_Score (Primary Driver)
+Strongest predictor with highly significant impact (p ≈ 0)
+Shows a threshold effect: fraud probability remains relatively stable at low-to-mid risk scores but increases sharply around 0.75
+The smooth, non-linear relationship captures complex patterns in the data
+Transaction_Amount
+Positive relationship: higher transaction amounts are associated with increased fraud risk
+Clear upward trend indicates larger transactions warrant more scrutiny
+Account_Balance and Card_Age
+Show minimal impact on fraud prediction (relatively flat curves)
+Included for completeness but contribute less to the model's decisions
+
 **Confusion Matrix**
 
 The confusion matrix for the GAM Fraud Detector provides a detailed
@@ -770,10 +790,10 @@ Positive Rate (1 - Specificity), allowing you to assess how well the
 model distinguishes between fraudulent and non-fraudulent transactions.
 In this case, the curve arcs significantly above the diagonal line that
 represents random guessing, indicating strong discriminative power. The
-Area Under the Curve (AUC) is 0.92 which is considered excellent and
+Area Under the Curve (AUC) is 0.73 which is considered excellent and
 suggests that the model correctly ranks a randomly chosen fraudulent
-transaction higher than a non-fraudulent one over 92% of the time. A
-dashed vertical line at a threshold of approximately 0.34 marks a
+transaction higher than a non-fraudulent one over 73% of the time. A
+dashed vertical line at a threshold of approximately 0.48 marks a
 selected operating point, helping visualize the trade-off between
 catching more frauds (higher sensitivity) and avoiding false alarms
 (lower false positive rate). This curve is especially valuable in fraud
@@ -865,7 +885,7 @@ ggsave("ROC_Curve.png", width = 8, height = 8, dpi = 300) # This saves the plot!
 
 **GAM Analysis of Transaction Amount, Account Balance, and Card Age**
 
-The plots illustrate how each predictor variable influences the response
+The smooth terms plots illustrate how each predictor variable influences the response
 in a Generalized Additive Model. Transaction_Amount shows a clear
 positive relationship, meaning higher amounts are associated with a
 stronger effect on the outcome. In contrast, both Account_Balance and
