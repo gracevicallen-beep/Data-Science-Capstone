@@ -278,9 +278,9 @@ GAMs therefore provide a modeling framework that balances accuracy,
 interpretability, and accountability, making them well-suited for
 effective and trustworthy fraud detection.
 
-## Analysis and Results
+## **Analysis and Results**
 
-### Data Exploration and Visualization
+### **Data Exploration and Visualization**
 
 #### **Data set Description**
 
@@ -1221,7 +1221,7 @@ p_roc <- ggplot(roc_df, aes(x = fpr, y = tpr)) +
 print(p_roc)
 ```
 
-## Conclusion
+## **Conclusion**
 
 This project explored the use of Generalized Additive Models (GAMs) to
 identify variables predictive of fraudulent activity in financial
