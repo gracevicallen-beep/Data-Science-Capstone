@@ -1,8 +1,8 @@
 ---
-title: "Generalized Additive Models in Fraud Detection and Pattern Recognition"
+title: "Generalized Additive Models in Fraud Detection"
 subtitle: "Data Science Capstone Project"
 author: "Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou"
-date: "November 16, 2025"
+date: "November 21, 2025"
 format: 
   html:
     code-fold: true       # Allows folding of code chunks
@@ -144,9 +144,9 @@ interpretable function of key predictors such as transaction amount,
 account activity, and time of day. Continuous variables are represented
 with spline-based smooth functions to capture nonlinear patterns, while
 categorical variables are incorporated as factors. The model is fitted
-using the `mgcv` package in R, which applies penalized regression
-splines and generalized cross-validation (GCV) to optimize smoothness
-and prevent overfitting [@Wood_2017]. After fitting, the smooth terms
+using the mgcv package in R, which applies penalized regression splines
+and generalized cross-validation (GCV) to optimize smoothness and
+prevent overfitting [@Wood_2017]. After fitting, the smooth terms
 illustrate how each variable influences fraud likelihood, enabling
 visual interpretation of complex effects. Model performance is then
 evaluated using metrics such as AUC, accuracy, and recall, and the
@@ -272,11 +272,10 @@ enhanced confidence in identifying irregular records [@Tragouda_2024;
 @Brossart_2015]. While more complex methods like deep learning may
 achieve higher raw accuracy, GAMs maintain interpretability and can
 serve as benchmark or surrogate models for black-box algorithms,
-supporting strong operational performance (AUC = 0.92).
-
-GAMs therefore provide a modeling framework that balances accuracy,
-interpretability, and accountability, making them well-suited for
-effective and trustworthy fraud detection.
+supporting strong operational performance in general. GAMs provide a
+modeling framework that balances accuracy, interpretability, and
+accountability, making them well-suited for effective and trustworthy
+fraud detection.
 
 ## **Analysis and Results**
 
@@ -566,134 +565,119 @@ ggplot(fraud_data, aes(x = Transaction_Amount, y = Fraud_Label)) +
 
 ### **Modeling and Results**
 
-**Model Overview** The model uses a logistic binomial Generalized
-Additive Model (GAM) to predict fraud probability in financial
-transactions. GAMs are particularly well-suited for fraud detection
-because they estimate the log-odds of fraud as a smooth, additive
-function of predictors, allowing the model to capture non-linear
-relationships while maintaining interpretability—crucial for
-understanding which factors drive fraud risk. In this case, the GAM
-predicts the probability that a transaction is fraudulent by analyzing
-features such as transaction amount, account balance, card age, and risk
-score. The smooth functions in the GAM highlight threshold effects and
-curved risk patterns, showing how each variable contributes to fraud
-probability beyond simple linear trends. Model diagnostics, including
-the confusion matrix and ROC curve, confirm strong classification
-performance, while the ability to visually display nonlinear variable
-effects ensures the model remains transparent and compliant for
-operational decision-making.
+The modeling process uses a logistic binomial Generalized Additive Model
+(GAM) to assess which variables in the dataset meaningfully predict
+fraudulent transactions. The purpose of this model is not only to
+estimate fraud probabilities, but also to evaluate the contribution of
+each predictor. The GAM framework allows continuous variables to have
+flexible shapes, which helps reveal whether their effects are linear,
+nonlinear, or negligible. Model performance metrics, including the
+confusion matrix and ROC curve, are included to summarize how well the
+selected predictors explain fraud patterns.
 
-**Primary Goal** To identify fraudulent transactions by analyzing
-patterns in transaction characteristics and assigning fraud
-probabilities using a logistic binomial Generalized Additive Model
-(GAM). This model estimates the log-odds of fraud as a smooth, additive
-function of key predictors—most notably Risk_Score and
-Transaction_Amount—allowing it to capture nonlinear relationships while
-remaining interpretable. The goal is to maximize fraud detection
-(sensitivity) while minimizing false alarms (false positives), which is
-critical in financial fraud prevention where accuracy and transparency
-are essential for operational decision-making and regulatory compliance.
-
-**Key Predictive Features** The GAM analyzes several variables to
-predict fraud: Risk_Score (Primary Driver) Strongest predictor with
-highly significant impact (p ≈ 0) Shows a threshold effect: fraud
-probability remains relatively stable at low-to-mid risk scores but
-increases sharply around 0.75 The smooth, non-linear relationship
-captures complex patterns in the data Transaction_Amount Positive
-relationship: higher transaction amounts are associated with increased
-fraud risk Clear upward trend indicates larger transactions warrant more
-scrutiny Account_Balance and Card_Age Show minimal impact on fraud
-prediction (relatively flat curves) Included for completeness but
-contribute less to the model's decisions
+The primary goal of this analysis is to test which variables serve as
+reliable predictors of fraudulent transactions. By examining the smooth
+terms and their significance, we can determine which features
+meaningfully influence fraud risk and which provide little or no
+predictive value.
 
 #### **Assumptions**
 
 The fitted GAM was evaluated using several diagnostic checks to ensure
 that the model meets the assumptions required for reliable
-interpretation. The basis-dimension results indicate that all three
-smooth terms—Transaction_Amount, Account_Balance, and Card_Age—have
-k-indices very close to 1 with non-significant p-values. This suggests
-that the spline basis for each smooth is adequate and neither under- nor
+interpretation. The basis-dimension results show that all three smooth
+terms (Transaction_Amount, Account_Balance, and Card_Age) have k-indices
+close to 1 with non-significant p-values. This indicates that the spline
+basis for each smooth is appropriate and is neither under- nor
 over-smoothed.
 
-The residual diagnostics provide additional support for model adequacy.
-The residuals-versus-fitted plot does not show any strong structure or
-curvature, which indicates that the additive form of the model is
-appropriate for the data. The Q–Q plot shows some deviations in the
-extreme tails, which is expected in a heavily imbalanced fraud dataset,
-but there is no major departure from the theoretical quantiles overall.
-The histogram of residuals displays the expected skew for a binomial
-response, and the ACF plot shows no signs of meaningful autocorrelation,
-supporting the assumption of residual independence.
+The residual diagnostics also support the adequacy of the model. The
+residuals-versus-fitted plot does not show any strong patterns or
+curvature, which suggests that the additive structure of the model is
+reasonable. The Q-Q plot shows some deviation in the extreme tails,
+which is expected in an imbalanced fraud dataset, but there is no major
+departure from the theoretical quantiles. The histogram of residuals
+reflects the expected skew for a binomial response, and the ACF plot
+shows no meaningful autocorrelation, which supports the assumption of
+independent residuals.
 
-Inspection of the smooth functions shows that none of the three
-continuous predictors exhibit unusually complex or erratic patterns. The
-estimated degrees of freedom are close to 1, indicating that the
-relationships between each predictor and the log-odds of fraud are
-essentially linear once the other terms are accounted for. The smooths
-are stable across the observed ranges, with wide confidence intervals
-where data are sparse, which is typical and acceptable.
+The smooth functions themselves appear well-behaved. None of the
+continuous predictors show unusually complex or unstable patterns, and
+the estimated degrees of freedom are close to 1. This suggests that each
+predictor has an essentially linear relationship with the log-odds of
+fraud after adjusting for the other variables. The smooth functions also
+widen in areas with limited data, which is normal.
 
-Taken together, the diagnostics suggest that the GAM is well-specified
-for this dataset. The smoothing parameters appear appropriate, the
-residual behavior is consistent with model assumptions, and there is no
-evidence of problematic dependence or concurvity among predictors.
-Overall, the model satisfies the key assumptions needed for reliable
-inference and provides a stable foundation for interpreting how
-transaction-related features relate to fraud probability.
+Overall, the diagnostic checks indicate that the GAM is well-specified
+for this dataset. The smoothing parameters are appropriate, the residual
+behavior aligns with model assumptions, and there is no evidence of
+problematic dependence among predictors. These results suggest that the
+model is stable and reliable for interpreting how transaction-related
+features relate to fraud probability.
 
 ```{r}
+
+#| label: gam-assumptions
+#| echo: false
+#| warning: false
+#| message: false
 
 library(mgcv)
 library(dplyr)
 
 # Load data
+
 data <- read.csv("synthetic_fraud_dataset.csv")
 data$Fraud_Label <- factor(data$Fraud_Label, levels = c(0,1))
 
-# Fit GAM model quietly
-gam_model <- suppressMessages(suppressWarnings(
-  gam(
-    Fraud_Label ~
-      Merchant_Category +
-      Is_Weekend +
-      s(Transaction_Amount) +
-      s(Account_Balance) +
-      s(Card_Age),
-    family = binomial(link = "logit"),
-    data = data,
-    method = "REML"
-  )
-))
+# Fit GAM model (same one used in analysis)
 
-# 1. Basis dimension check (captured quietly)
-gam_check_results <- suppressMessages(suppressWarnings(
-  capture.output(gam_check_results <- gam.check(gam_model))
-))
+gam_model <- gam(
+Fraud_Label ~
+Merchant_Category +
+Is_Weekend +
+s(Transaction_Amount) +
+s(Account_Balance) +
+s(Card_Age),
+family = binomial(link = "logit"),
+data = data,
+method = "REML"
+)
 
-# 2. Diagnostic plots saved to file (no console pop-ups)
+# 1. Basis dimension check
+
+invisible(capture.output(gam_check_results <- gam.check(gam_model)))
+
+# 2. Diagnostic plots
+
 par(mfrow = c(2,2))
 
 # Smooth terms
+
 plot(gam_model, pages = 1, se = TRUE, rug = TRUE)
 
 # Residuals vs fitted
+
+# Save and restore plotting layout
+old_par <- par(mfrow = c(2, 2))
+on.exit(par(old_par), add = TRUE)
+
+# Residuals vs Fitted
 plot(gam_model$residuals ~ gam_model$fitted.values,
      xlab = "Fitted Values", ylab = "Residuals",
      main = "Residuals vs Fitted")
-abline(h = 0, col = "red")
+abline(h = 0)
 
-# QQ-plot
+# Normal Q–Q plot
 qqnorm(gam_model$residuals, main = "Normal Q-Q Plot")
-qqline(gam_model$residuals, col = "red")
+qqline(gam_model$residuals)
 
 # ACF of residuals
 acf(gam_model$residuals, main = "ACF of Residuals")
 
-dev.off()
+# Prevent printing of 'NULL' or device numbers
+invisible(NULL)
 
-# 3. Concurvity
-conc_vals <- concurvity(gam_model, full = TRUE)
 ```
 
 #### **GAM Analysis for Numeric Variables**
@@ -844,7 +828,7 @@ ggplot(tidy_cat, aes(x = reorder(term, OR), y = OR)) +
 
 #### **GAM Model for Risk Score**
 
-To examine the association between `Risk_Score` and fraud, we fit a
+To examine the association between Risk_Score and fraud, we fit a
 generalized additive model (GAM) using a logit link function. Following
 the general GAM structure:
 
@@ -856,13 +840,12 @@ $$
 \text{logit}(\Pr(\text{Fraud} = 1)) = \alpha + s(\text{Risk\_Score})
 $$
 
-where \$\\alpha = 1.9109\$ is the intercept, representing the baseline
-log-odds of fraud when Risk_Score is zero. The smooth term
-\$s(\\text{Risk_Score})\$ captures the nonlinear relationship between
-Risk_Score and fraud probability. The effective degrees of freedom for
-the smooth term is approximately 9, allowing flexibility in modeling
-nonlinear changes. Its high significance indicates a strong association
-with fraud.
+where alpha = 1.9109 is the intercept, representing the baseline
+log-odds of fraud when Risk_Score is zero. The smooth term Risk_Score
+captures the nonlinear relationship between Risk_Score and fraud
+probability. The effective degrees of freedom for the smooth term is
+approximately 9, allowing flexibility in modeling nonlinear changes. Its
+high significance indicates a strong association with fraud.
 
 ```{r message=FALSE, warning=FALSE}
 # Load packages
@@ -926,24 +909,26 @@ the GAM to flexibly model nonlinear changes in fraud probability. Its
 high significance indicates a strong association between Risk_Score and
 fraud.*
 
+**Risk Score GAM Curve**
+
 *Figure 12* is a generalized additive model (GAM) used to examine how
-`Risk_Score` influences the probability of fraud. The parametric term
-(intercept) represents the baseline fraud probability when `Risk_Score`
-is zero, which is approximately 87% in this dataset, and is
-statistically significant (p ≈ 0). The smooth term `s(Risk_Score)`
-captures the potentially nonlinear relationship between risk score and
-fraud probability, with an estimated degrees of freedom of \~9 and a
-highly significant p-value (0), indicating that `Risk_Score` is a strong
+Risk_Score influences the probability of fraud. The parametric term
+(intercept) represents the baseline fraud probability when Risk_Score is
+zero, which is approximately 87% in this dataset, and is statistically
+significant (p ≈ 0). The smooth terms (Risk_Score) captures the
+potentially nonlinear relationship between risk score and fraud
+probability, with an estimated degrees of freedom of \~9 and a highly
+significant p-value (0), indicating that Risk_Score is a strong
 predictor of fraud.
 
 The accompanying figure visualizes the predicted probabilities: the
 **steelblue dots** represent individual transactions in the dataset (the
 raw predicted probabilities for each transaction), while the **red
 line** represents the fitted GAM curve showing the estimated trend of
-fraud probability across the range of `Risk_Score` values. Fraud
-probability remains relatively steady across low-to-mid `Risk_Score`
+fraud probability across the range of Risk_Score values. Fraud
+probability remains relatively steady across low-to-mid Risk_Score
 values, with minor nonlinear fluctuations, but increases sharply around
-a `Risk_Score` of approximately 0.75, highlighting a threshold effect.
+a Risk_Score of approximately 0.75, highlighting a threshold effect.
 Together, these results demonstrate that higher risk scores are strongly
 associated with increased likelihood of fraud, and the GAM effectively
 captures both subtle patterns and nonlinear changes in this
@@ -1223,43 +1208,49 @@ print(p_roc)
 
 ## **Conclusion**
 
-This project explored the use of Generalized Additive Models (GAMs) to
-identify variables predictive of fraudulent activity in financial
-transactions. GAMs provided a strong balance between interpretability
-and predictive performance, allowing us to model nonlinear relationships
-between features such as Risk_Score, Transaction_Amount, Card_Age, and
-prior transaction history. Smooth term visualizations highlighted how
-each variable influenced fraud probability, aligning with the project
-aim of determining key predictive factors.
+The GAM demonstrated solid classification performance. Key findings
+include:
 
-The model demonstrated solid classification performance. Risk_Score
-emerged as the dominant predictor, with fraud probability sharply
-increasing around a score of 0.75, while Transaction_Amount showed a
-moderate positive effect. Account_Balance and Card_Age had minimal
-impact. The confusion matrix indicated that out of the test
+-   **Risk_Score** – the dominant predictor, with fraud probability
+    sharply increasing around a score of 0.75, showing a clear threshold
+    effect.
+
+-   **Transaction_Amount** – shows a moderate positive effect on fraud
+    probability, with larger transactions more likely to be fraudulent.
+
+Model performance metrics support these findings. Out of the test
 transactions, 2,318 fraudulent transactions were correctly identified
-(true positives) and 10,102 legitimate transactions were correctly
-classified (true negatives), while 77 legitimate transactions were
-incorrectly flagged (false positives) and 2,502 fraudulent transactions
-were missed (false negatives). The ROC curve had an area under the curve
-(AUC) of 0.73, reflecting good discriminative ability.
+(true positives), 10,102 legitimate transactions were correctly
+classified (true negatives), 77 legitimate transactions were incorrectly
+flagged (false positives), and 2,502 fraudulent transactions were missed
+(false negatives). The ROC curve had an area under the curve (AUC) of
+0.73, indicating good discriminative ability.
 
-Several limitations were noted. The dataset is synthetic and relatively
-evenly distributed, which reduced the availability of strong predictors
-and may have dampened variable effects. GAMs are sensitive to class
-imbalance, potentially affecting recall for rare fraud cases, and
-categorical variables with high cardinality may require preprocessing to
-prevent overfitting. Additionally, while GAMs are interpretable, more
-complex machine learning methods like gradient boosting could achieve
-higher raw predictive accuracy.
+Several limitations were noted. The dataset is synthetic and evenly
+distributed, which reduced the availability of strong predictors. GAMs
+are sensitive to class imbalance, which may affect recall for rare fraud
+cases. While GAMs are interpretable, more complex machine learning
+methods such as gradient boosting could achieve higher predictive
+accuracy.
 
-Despite these limitations, GAMs effectively identified and quantified
-the influence of transaction characteristics on fraud probability,
-providing interpretable insights for operational decision-making. Future
-work could integrate GAMs into real-time fraud detection systems,
-combine them with ensemble methods for higher accuracy, and leverage
-streaming or temporal data to capture evolving fraud patterns. Overall,
-this analysis demonstrates the utility of GAMs in detecting fraud while
-maintaining transparency and trustworthiness for stakeholders.
+Despite these limitations, the GAM effectively identified which
+transaction characteristics are related to fraud, providing insights
+that are easy to interpret and explain. Future work could include
+integrating the model into real-time fraud detection, combining it with
+other machine learning methods for higher accuracy, and using streaming
+data to capture changing fraud patterns over time.
+
+This study shows a clear progression from theory to practice. The model
+fit the data well, and the results show how Risk_Score and
+Transaction_Amount influence fraud probability. These findings provide
+understandable and auditable risk indicators that can guide fraud
+alerts, review priorities, and policy decisions.
+
+Finally, the project highlights practices that support both accuracy and
+accountability. Proper feature selection, stratified sampling, and
+attention to class imbalance are important. Thresholds should reflect
+cost-sensitive trade-offs and be updated regularly. GAM outputs,
+including the smooth curves, help stakeholders understand the results
+and monitor model performance over time.
 
 ## References
