@@ -172,15 +172,16 @@ evaluation and interpretation.
 }}}%%
 
 flowchart TB
-A["Data Preparation<br/>- Clean data<br/>- Encode categorical variables"] --> B["Exploratory Data Analysis<br/>- Check distributions<br/>- Identify predictors"]
-B --> C["Split Data<br/>- Train/Test sets<br/>- Stratify by fraud outcome"]
-C --> D["Specify GAM Model<br/>- Select predictors<br/>- Define smooth terms<br/>- Family = binomial"]
-D --> E["Fit Model<br/>mgcv::gam(...)"]
-E --> F["Evaluate Model<br/>- ROC/AUC<br/>- Confusion Matrix"]
-F --> G["Interpret Results<br/>- Plot smooth effects"]
-G --> H["Predict New Data<br/>- Apply model to test or new cases"]
-
-style H fill:#FF4C4C,stroke:#8B0000,color:#FFFFFF
+    A[Data Acquisition<br/>-Synthetic Kaggle Fraud Dataset<br/>-50k rows, 21 features] --> B[Data Exploration & Cleaning<br/>- Distribution review<br/>-Skew/outlier checks]
+    B --> C[Categorical Summary<br/>-Transaction Type<br/>-Device Type<br/>-Merchant Category]
+    C --> D[Visualizations<br/>-Histograms<br/>-Skewed variables<br/>-Nonlinear patterns]
+    D --> E[Assumptions<br/>-k-index<br/>-QQ plot<br/>-Residuals]
+    E --> F[GAM Analysis<br/>-Numeric GAM Interpretation<br/>-Categorical GAM Interpretation]
+    F --> G[GAM Model for predictors]
+    G --> H[Model Performance<br/>-Confusion Matrix<br/>-ROC Curve<br/>-AUC = 0.73]
+    H --> I[Final Interpretation<br/>-Main findings]
+    
+style I fill:#FF4C4C,stroke:#8B0000,color:#FFFFFF
 ```
 
 ### **Equation**
