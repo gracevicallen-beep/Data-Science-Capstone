@@ -3,18 +3,17 @@ body {
   font-family: "Avenir", "Helvetica Neue", sans-serif;
 }
 
-}
-
+/* Clean section headers */
 h2, h3 {
   color: #232828;
   background: none !important;
   border: none !important;
   box-shadow: none !important;
   padding: 0 !important;
-  margin: 1em 0 0.5em 0; /* standard spacing */
+  margin: 1em 0 0.5em 0;
 }
 
-/* Target the outer appendix container and inner references */
+/* Appendix + references cleanup */
 #quarto-appendix,
 #quarto-appendix section.quarto-appendix-contents,
 #quarto-appendix section.quarto-appendix-contents h2,
@@ -22,25 +21,26 @@ h2, h3 {
 #refs.references * {
     margin: 0 !important;
     padding: 0 !important;
-    background-color: #afc6c6 !important; /* same as page */
+    background-color: #afc6c6 !important;
 }
 
-/* Optional: remove hanging indent spacing if you want flush references */
 #refs.references {
     text-indent: 0 !important;
 }
 
-/* Optional: remove spacing from individual reference entries */
 #refs.references li {
     margin: 0 !important;
     padding: 0 !important;
 }
-/* Make code blocks scrollable horizontally */
+
+/* RevealJS code scrolling override */
+.reveal pre {
+  max-height: 350px !important;
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+  white-space: pre !important;
+}
+
 .reveal pre code {
-  max-height: 350px;   /* adjust height to your preference */
-  overflow-y: auto;
-  overflow-x: auto;
-  display: block;
-  padding: 1em;
-  border-radius: 8px;
+  white-space: pre !important;
 }
