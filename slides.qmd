@@ -431,7 +431,27 @@ par(mfrow = c(1, 1))
 
 ## GAM Analysis for Categorical Variables
 
-![](images/table.png){fig-align="left"}
+**Transaction_TypeBankTransfer**\
+p.value: 0.498\
+OR_low: 0.931\
+OR_high: 1.035
+
+**Transaction_TypeOnline**\
+p.value: 0.546\
+OR_low: 0.933\
+OR_high: 1.037
+
+## GAM Analysis for Categorical Variables
+
+**Merchant_CategoryElectronics**\
+p.value: 0.734\
+OR_low: 0.952\
+OR_high: 1.072
+
+**Merchant_CategoryGroceries**\
+p.value: 0.531\
+OR_low: 0.960\
+OR_high: 1.082
 
 ## GAM Model for Key Predictor
 
@@ -489,7 +509,7 @@ $$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
 
 our model simplifies to a single predictor:
 
-$$ \text{logit}(\Pr(\text{Fraud} = 1)) = \alpha + s(\text{Risk\_Score}) $$
+$$ \text{logit}(\Pr(\text{Fraud} = 1)) = \alpha + s(\text{Risk_Score}) $$
 
 where alpha = 1.9109 is the intercept, representing the baseline
 log-odds of fraud when Risk_Score is zero.
