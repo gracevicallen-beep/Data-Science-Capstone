@@ -5,10 +5,9 @@ author: "Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou"
 date: "November 21, 2025"
 format:
   revealjs:
-    html:
-    code-fold: true       # Allows folding of code chunks
-    self-contained: true  # Packages images and CSS in the HTML
-    css: styles.css
+    code-fold: true
+    self-contained: true
+theme: reveal.scss
 output-dir: report1      # Folder where rendered HTML will go
 bibliography: references.bib
 #always_allow_html: true # this allows to get PDF with HTML features
@@ -109,7 +108,23 @@ diverse domains:**
 
 ## Modeling Workflow Steps
 
-![](images/Screenshot%202025-11-30%20194021-01.png){fig-align="center"}
+1\. Data Acquisition
+
+2\. Data Exploration & Cleaning
+
+3\. Categorical Summary
+
+4\. Visualizations
+
+5\. Assumptions
+
+6\. GAM Analysis
+
+7\. GAM Model for predictors
+
+8\. Model Performance
+
+9\. Final Interpretation
 
 ## GAM Equation
 
@@ -175,77 +190,78 @@ $$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
 
 **Data Exploration and Visualization**
 
-Dataset Description
+**Dataset Description**
 
-**🔹 What It Is**
+**What It Is**
 
-A synthetic dataset built to mimic real financial transactions
+-   A synthetic dataset built to mimic real financial transactions
 
-Privacy‑safe: no real people’s data used
+-   Privacy‑safe: no real people’s data used
 
-Hosted on Kaggle
-
-## Analysis and Results
-
-**Data Exploration and Visualization**
-
-**🔹 Why We Use It**
-
-Train fraud detection models for binary classification tasks
-
-Spot fraud: each transaction labeled as fraud (1) or not fraud (0)
+-   Hosted on Kaggle
 
 ## Analysis and Results
 
 **Data Exploration and Visualization**
 
-**🔹 What Makes It Special**
+**Why We Use It**
+
+-   Train fraud detection models for binary classification tasks
+
+-   Spot fraud: each transaction labeled as fraud (1) or not fraud (0)
+
+## Analysis and Results
+
+**Data Exploration and Visualization**
+
+**What Makes It Special**
 
 Realistic fraud patterns:
 
-Groups of fraudulent transactions
+-   Groups of fraudulent transactions
 
-Subtle, hard‑to‑notice anomalies
+-   Subtle, hard‑to‑notice anomalies
 
-Odd user behaviors
+-   Odd user behaviors
 
-Large & diverse records: balances normal vs. rare fraud cases →
-addresses class imbalance.
+-   Large & diverse records: balances normal vs. rare fraud cases →
+    addresses class imbalance.
 
 ## Data Exploration and Visualization
 
 **Key Characteristics**
 
-**🔹 What's Inside**
+**What's Inside**
 
-50,000 Rows: A good amount of data to work with.
+-   50,000 Rows: A good amount of data to work with.
 
-Two Labels: Every transaction is marked as either: 1 = Fraud 0 = Not
-Fraud
-
-## Data Exploration and Visualization
-
-**🔹Data Features-- 21 features across three categories:**
-
-Numbers: Like transaction amounts, risk scores, account balances.
-
-Categories: Transaction types (payment, transfer, withdrawal), device
-types, merchant categories.
-
-Time Data: When transactions happened (time, day) and their sequence.
+-   Two Labels: Every transaction is marked as either: 1 = Fraud 0 = Not
+    Fraud
 
 ## Data Exploration and Visualization
 
-**🔹Label Distribution Class Imbalance:**
+**Data Features-- 21 features across three categories:**
 
-Fraudulent transactions are a small percentage, reflecting real-world
-scenarios.
+-   Numbers: Like transaction amounts, risk scores, account balances.
 
-Behavioral Realism: Includes unusual spending, behavioral signals, and
-high-risk profiles.
+-   Categories: Transaction types (payment, transfer, withdrawal),
+    device types, merchant categories.
 
-Modeling flexibility: supports interpretable (GAMs, logistic regression)
-or high-performance (XGBoost) approaches
+-   Time Data: When transactions happened (time, day) and their
+    sequence.
+
+## Data Exploration and Visualization
+
+**Label Distribution Class Imbalance:**
+
+-   Fraudulent transactions are a small percentage, reflecting
+    real-world scenarios.
+
+-   Behavioral Realism: Includes unusual spending, behavioral signals,
+    and high-risk profiles.
+
+-   Modeling flexibility: supports interpretable (GAMs, logistic
+    regression) or high-performance (XGBoost) approaches
 
 ## Distribution of Variables
 
@@ -415,53 +431,9 @@ par(mfrow = c(1, 1))
 
 ## GAM Analysis for Categorical Variables
 
-```{r}
-library(mgcv)
-library(broom)
-library(dplyr)
-library(knitr)
-#install.packages("kableExtra")
-library(kableExtra)
+![](images/table.png){fig-align="left"}
 
-
-# Fit GAM with categorical predictors only
-gam_cat <- gam(
-  Fraud_Label ~ 
-    Transaction_Type +
-    Merchant_Category +
-    Device_Type +
-    Card_Type +
-    Authentication_Method +
-    Is_Weekend +
-    IP_Address_Flag +
-    Previous_Fraudulent_Activity,
-  family = binomial(link = "logit"),
-  data = data
-)
-
-# Get a tidy summary of parametric coefficients
-tidy_gam_cat <- tidy(gam_cat, parametric = TRUE) %>%
-  filter(term != "(Intercept)") %>%   # optional: remove intercept
-  mutate(
-    OR = exp(estimate),               # convert log-odds to odds ratio
-    OR_low = exp(estimate - 1.96 * std.error),
-    OR_high = exp(estimate + 1.96 * std.error)
-  )
-
-# Clean table for Quarto/HTML report
-tidy_gam_cat %>%
-  select(term, estimate, std.error, statistic, p.value, OR, OR_low, OR_high) %>%
-  mutate(across(where(is.numeric), ~ round(., 3))) %>%  # round numbers nicely
-  kable(
-    format = "html",                     # use "latex" if rendering PDF
-    caption = "Table 4. GAM Categorical Coefficients"
-  ) %>%
-  kable_styling(full_width = FALSE, position = "center")
-```
-
-![](images/clipboard-303827182.png)
-
-## GAM Model For the Key Predictor
+## GAM Model for Key Predictor
 
 ```{r message=FALSE, warning=FALSE}
 # Load packages
@@ -511,9 +483,7 @@ ggplot(fraud_data, aes(x = Risk_Score, y = predicted_prob)) +
 
 ## GAM Equation for Key Predictor
 
-To examine the association between Risk_Score and fraud, we fit a
-generalized additive model (GAM) using a logit link function. Following
-the general GAM structure:
+GAM equation structure:
 
 $$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
 
@@ -522,8 +492,4 @@ our model simplifies to a single predictor:
 $$ \text{logit}(\Pr(\text{Fraud} = 1)) = \alpha + s(\text{Risk\_Score}) $$
 
 where alpha = 1.9109 is the intercept, representing the baseline
-log-odds of fraud when Risk_Score is zero. The smooth term Risk_Score
-captures the nonlinear relationship between Risk_Score and fraud
-probability. The effective degrees of freedom for the smooth term is
-approximately 9, allowing flexibility in modeling nonlinear changes. Its
-high significance indicates a strong association with fraud.
+log-odds of fraud when Risk_Score is zero.
