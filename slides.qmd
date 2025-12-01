@@ -1,1 +1,526 @@
+---
+title: "Generalized Additive Models in Fraud Detection"
+subtitle: "Data Science Capstone Project"
+author: "Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou"
+date: "November 21, 2025"
+format:
+  revealjs:
+    css: styles.css
+output-dir: report1      # Folder where rendered HTML will go
+bibliography: references.bib
+#always_allow_html: true # this allows to get PDF with HTML features
+csl: apa.csl 
+execute: 
+  warning: false
+  message: false
+course: "Capstone Projects in Data Science"
+editor:
+  markdown: 
+    wrap: 72
+---
 
+## Introduction
+
+**What are generalized additive models?**
+
+-   Not your typical straight-line regression — GAMs let patterns curve
+    naturally
+
+-   Great at uncovering hidden trends in messy real-world data
+
+-   Each feature gets its own shape, showing where risk rises or falls
+
+-   Makes the model’s behavior easy to explain to non-technical teams
+
+-   Perfect for fraud detection, where small pattern changes matter
+
+## Brief History of GAMs
+
+Generalized Additive Models were introduced in the late 1980s as a way
+to add flexibility to traditional regression models. Trevor Hastie and
+Robert Tibshirani developed the framework to allow each predictor in a
+model to follow its own smooth pattern rather than forcing everything
+into a straight line. Through the 1990s and early 2000s, the approach
+grew in popularity in fields that needed interpretable models, including
+public health, ecology, and social sciences.
+
+## Brief History of GAMs
+
+A major step forward came with the development of the mgcv package in R,
+created by Simon Wood. His work added modern smoothing techniques,
+automatic penalty selection, and faster computation, making GAMs
+practical for large and noisy datasets. Today, GAMs are widely used in
+finance, fraud detection, risk scoring, and other areas where
+organizations need both predictive accuracy and clear explanations.
+
+## GAMS in Action: Real World Uses + Our Study
+
+**GAMs help uncover nonlinear relationships and subtle patterns across
+diverse domains:**
+
+-   Financial Analytics: Detecting anomalies and potential fraud in
+    transaction data
+
+-   Banking & Insurance: Modeling risk scores in banking and insurance
+
+## GAMS in Action: Real World Uses + Our Study
+
+**GAMs help uncover nonlinear relationships and subtle patterns across
+diverse domains:**
+
+-   Environmental Science: Forecasting trends in environmental and
+    climate research
+
+-   Public Health: Understanding health outcomes and public health
+    patterns
+
+## **Our Project: Study Context: GAMs for Fraud Detection** 
+
+-   Toolset: RStudio + package
+
+-   Dataset: Kaggle’s Fraud Detection Transactions (Ashar, 2024)
+
+-   Purpose: Identify predictive variables linked to fraudulent activity
+
+-   Context: Synthetic but realistic data for controlled testing
+
+***Here’s how we used GAMs to explore patterns in the fraud dataset.***
+
+## Methods
+
+**GAM Modeling Overview**
+
+-   GAMs extend traditional regression
+
+-   Capture nonlinear predictor-response relationships
+
+-   Use spline-based smooth functions
+
+-   Combine continuous + categorical predictors
+
+-   Fit with mgcv (penalized splines + GCV)
+
+-   Model outputs interpretable smooth effects
+
+-   Goal: Estimate probability of fraud
+
+## Modeling Workflow Steps
+
+![](images/Screenshot 2025-11-30 194021-01.png){fig-align="center"}
+
+## GAM Equation
+
+$$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
+
+-   \(g\) = link function (logit for binary fraud)
+
+-   Smooth functions capture nonlinear effects
+
+-   Additive contributions from each predictor
+
+-   Balances flexibility + interpretability
+
+## GAM Assumptions (Fraud Context)
+
+-   Logit link approximates fraud probability
+
+-   Additive and independent predictor effects
+
+-   Smooth, gradual functional relationships
+
+-   Binomial response distribution
+
+-   Independent observations
+
+-   Low predictor multicollinearity
+
+-   Penalization prevents overfitting
+
+## Why We Chose GAMs For Fraud Detection
+
+-   Captures nonlinear fraud patterns
+
+-   Handles rare, imbalanced outcomes
+
+-   Produces interpretable smooth risk curves
+
+-   Supports regulatory transparency
+
+-   Balances accuracy + interpretability
+
+-   Strong literature support for fraud analytics
+
+-   Scalable through mgcv’s automated smoothing
+
+## Practical Advantages & Relevance to Real-World Analytics
+
+-   Supports investigative decision-making
+
+-   Shows monotonic or nonlinear risk curves
+
+-   Supports investigative decision-making
+
+-   Can benchmark or surrogate black-box models
+
+-   High recall for suspicious transactions
+
+-   Useful for auditors, fraud teams, analysts
+
+-   Aligns with both operational and compliance needs
+
+## Analysis and Results
+
+**Data Exploration and Visualization**
+
+Dataset Description
+
+**🔹 What It Is**
+
+A synthetic dataset built to mimic real financial transactions
+
+Privacy‑safe: no real people’s data used
+
+Hosted on Kaggle
+
+## Analysis and Results
+
+**Data Exploration and Visualization**
+
+**🔹 Why We Use It**
+
+Train fraud detection models for binary classification tasks
+
+Spot fraud: each transaction labeled as fraud (1) or not fraud (0)
+
+## Analysis and Results
+
+**Data Exploration and Visualization**
+
+**🔹 What Makes It Special**
+
+Realistic fraud patterns:
+
+Groups of fraudulent transactions
+
+Subtle, hard‑to‑notice anomalies
+
+Odd user behaviors
+
+Large & diverse records: balances normal vs. rare fraud cases →
+addresses class imbalance.
+
+## Data Exploration and Visualization
+
+**Key Characteristics**
+
+**🔹 What's Inside**
+
+50,000 Rows: A good amount of data to work with.
+
+Two Labels: Every transaction is marked as either: 1 = Fraud 0 = Not
+Fraud
+
+## Data Exploration and Visualization
+
+**🔹Data Features-- 21 features across three categories:**
+
+Numbers: Like transaction amounts, risk scores, account balances.
+
+Categories: Transaction types (payment, transfer, withdrawal), device
+types, merchant categories.
+
+Time Data: When transactions happened (time, day) and their sequence.
+
+## Data Exploration and Visualization
+
+**🔹Label Distribution Class Imbalance:**
+
+Fraudulent transactions are a small percentage, reflecting real-world
+scenarios.
+
+Behavioral Realism: Includes unusual spending, behavioral signals, and
+high-risk profiles.
+
+Modeling flexibility: supports interpretable (GAMs, logistic regression)
+or high-performance (XGBoost) approaches
+
+## Distribution of Variables
+
+```{r}
+# Load libraries
+library(tidyverse)
+library(janitor)
+library(gt)
+library(scales)
+
+# === Load dataset ===
+data_path <- "synthetic_fraud_dataset.csv"
+df <- readr::read_csv(data_path, show_col_types = FALSE) |>
+  clean_names()
+
+# === Create count tables ===
+tbl_type <- df |>
+  count(transaction_type, name = "Count") |>
+  arrange(desc(Count)) |>
+  rename(Type = transaction_type)
+
+tbl_device <- df |>
+  count(device_type, name = "Count") |>
+  arrange(desc(Count)) |>
+  rename(Device = device_type)
+
+tbl_merchant <- df |>
+  count(merchant_category, name = "Count") |>
+  arrange(desc(Count)) |>
+  rename(Merchant_Category = merchant_category)
+
+# === Blue Theme for gt Tables ===
+style_blue_gt <- function(.data, title_text) {
+  .data |>
+    gt() |>
+    tab_header(title = md(title_text)) |>
+    fmt_number(columns = "Count", decimals = 0, sep_mark = ",") |>
+    tab_options(
+      table.font.names = "Arial",
+      table.font.size  = 14,
+      data_row.padding = px(6),
+      heading.align    = "left",
+      table.border.top.color    = "darkblue",
+      table.border.top.width    = px(3),
+      table.border.bottom.color = "darkblue",
+      table.border.bottom.width = px(3)
+    ) |>
+    tab_style(
+      style = list(cell_fill(color = "darkblue"),
+                   cell_text(color = "white", weight = "bold")),
+      locations = cells_title(groups = "title")
+    ) |>
+    tab_style(
+      style = list(cell_fill(color = "steelblue"),
+                   cell_text(color = "white", weight = "bold")),
+      locations = cells_column_labels(everything())
+    ) |>
+    opt_row_striping() |>
+    cols_align("right", columns = "Count")
+}
+
+# === Render all three blue tables ===
+style_blue_gt(tbl_type, "Table 1 – Transaction Types and Counts")
+style_blue_gt(tbl_device, "Table 2 – Device Types and Counts")
+style_blue_gt(tbl_merchant, "Table 3 – Merchant Categories and Counts")
+
+```
+
+## Distribution of Variables 
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(patchwork)  # for arranging multiple ggplots
+
+# Load dataset
+fraud_data <- read.csv("synthetic_fraud_dataset.csv")
+
+# Convert Timestamp to date and calculate Issuance_Year if needed
+fraud_data <- fraud_data %>%
+  mutate(
+    Timestamp = ymd_hms(Timestamp, quiet = TRUE),  # adjust format if needed
+    Transaction_Year = year(Timestamp),
+    Issuance_Year = Transaction_Year - Card_Age
+  ) %>%
+  filter(!is.na(Card_Age))  # remove rows with NA in Card_Age
+
+# Variables to plot (move Transaction_Amount to last)
+numeric_vars <- c("Account_Balance", "Transaction_Distance", "Risk_Score", "Card_Age", "Transaction_Amount")
+
+# Create a list to store plots
+plot_list <- list()
+
+# Generate plots and store in the list
+for (var in numeric_vars) {
+  p <- ggplot(fraud_data, aes_string(x = var)) +
+    geom_histogram(fill = "steelblue", color = "white", bins = 30) +
+    labs(title = paste("Distribution of", var),
+         x = var,
+         y = "Count") +
+    theme_light()
+  
+  plot_list[[var]] <- p
+}
+
+# Arrange plots in a grid: 2 plots per row
+(plot_list[[1]] | plot_list[[2]]) /
+(plot_list[[3]] | plot_list[[4]]) /
+plot_list[[5]]  # Transaction_Amount appears last
+```
+
+## Non-linearity Check 
+
+```{r}
+library(tidyverse)
+# Load dataset
+fraud_data <- read.csv("synthetic_fraud_dataset.csv")
+# Ensure Fraud_Label is numeric (0/1)
+fraud_data <- fraud_data %>%
+  mutate(Fraud_Label = as.numeric(Fraud_Label))
+
+# Nonlinearity check: Transaction Amount vs Fraud Probability
+ggplot(fraud_data, aes(x = Transaction_Amount, y = Fraud_Label)) +
+  geom_smooth(method = "loess", se = FALSE, color = "darkblue") +
+  labs(title = "Figure 3. Transaction Amount and Fraud Probability",
+       x = "Transaction Amount",
+       y = "Fraud Probability") +
+  theme_light()
+```
+
+## Modeling and Results
+
+**Assumptions**
+
+![](images/rvf.png){fig-align="center"}
+
+## GAM Analysis for Numeric Variables
+
+```{r}
+#install.packages("caret")
+library(mgcv)
+library(dplyr)
+library(caret)
+# Load your data
+data <- read.csv("synthetic_fraud_dataset.csv")
+# Build GAM model with Risk_Score included as a smooth term
+gam_model <- gam(Fraud_Label ~
+               	Merchant_Category +
+               	Is_Weekend +
+               	s(Transaction_Amount) +
+               	s(Account_Balance) +
+               	s(Card_Age) +
+               	s(Risk_Score),
+             	family = binomial(link = "logit"),
+             	data = data)
+par(mfrow = c(2, 2), mar = c(4, 4, 3, 2))
+plot(gam_model, select = 1, shade = TRUE, col = "blue", lwd = 2,
+ 	shade.col = "lightblue", main = "s(Transaction_Amount)")
+plot(gam_model, select = 2, shade = TRUE, col = "green4", lwd = 2,
+ 	shade.col = "lightgreen", main = "s(Account_Balance)")
+plot(gam_model, select = 3, shade = TRUE, col = "purple", lwd = 2,
+ 	shade.col = "plum", main = "s(Card_Age)")
+plot(gam_model, select = 4, shade = TRUE, col = "red", lwd = 2,
+ 	shade.col = "pink", main = "s(Risk_Score)")
+par(mfrow = c(1, 1))
+```
+
+## GAM Analysis for Categorical Variables
+
+```{r}
+library(mgcv)
+library(broom)
+library(dplyr)
+library(knitr)
+#install.packages("kableExtra")
+library(kableExtra)
+
+
+# Fit GAM with categorical predictors only
+gam_cat <- gam(
+  Fraud_Label ~ 
+    Transaction_Type +
+    Merchant_Category +
+    Device_Type +
+    Card_Type +
+    Authentication_Method +
+    Is_Weekend +
+    IP_Address_Flag +
+    Previous_Fraudulent_Activity,
+  family = binomial(link = "logit"),
+  data = data
+)
+
+# Get a tidy summary of parametric coefficients
+tidy_gam_cat <- tidy(gam_cat, parametric = TRUE) %>%
+  filter(term != "(Intercept)") %>%   # optional: remove intercept
+  mutate(
+    OR = exp(estimate),               # convert log-odds to odds ratio
+    OR_low = exp(estimate - 1.96 * std.error),
+    OR_high = exp(estimate + 1.96 * std.error)
+  )
+
+# Clean table for Quarto/HTML report
+tidy_gam_cat %>%
+  select(term, estimate, std.error, statistic, p.value, OR, OR_low, OR_high) %>%
+  mutate(across(where(is.numeric), ~ round(., 3))) %>%  # round numbers nicely
+  kable(
+    format = "html",                     # use "latex" if rendering PDF
+    caption = "Table 4. GAM Categorical Coefficients"
+  ) %>%
+  kable_styling(full_width = FALSE, position = "center")
+```
+
+![](images/clipboard-303827182.png)
+
+## GAM Model For the Key Predictor
+
+```{r message=FALSE, warning=FALSE}
+# Load packages
+library(mgcv)
+library(ggplot2)
+library(dplyr)
+library(broom)
+
+fraud_data <- read.csv("synthetic_fraud_dataset.csv")
+
+# Make sure Fraud_Label is numeric (0 = legit, 1 = fraud)
+fraud_data <- fraud_data %>%
+  mutate(Fraud_Label = as.numeric(Fraud_Label))
+
+# Fit the Generalized Additive Model (GAM)
+risk_gam <- gam(Fraud_Label ~ s(Risk_Score),
+                data = fraud_data,
+                family = binomial(link = "logit"))
+
+# Tidy model summary (clean output)
+smooth_summary <- tidy(risk_gam, parametric = FALSE)
+
+
+# Predicted probabilities
+fraud_data <- fraud_data %>%
+  mutate(predicted_prob = predict(risk_gam, type = "response"))
+
+# Visualization: Predicted probability by Risk Score with descriptive legend
+ggplot(fraud_data, aes(x = Risk_Score, y = predicted_prob)) +
+  geom_point(aes(color = "Raw Data"), alpha = 0.3) +   # raw data points
+  geom_smooth(aes(color = "Fitted GAM Curve"), se = TRUE, linewidth = 1) +  # GAM fit
+  scale_color_manual(
+    name = "Legend",
+    values = c(
+      "Raw Data" = "steelblue",
+      "Fitted GAM Curve" = "red"
+    )
+  ) +
+  labs(
+    title = "Figure 12. Fraud Probability vs. Risk Score",
+    x = "Risk Score",
+    y = "Predicted Probability of Fraud"
+  ) +
+  theme_light(base_size = 13) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+```
+
+## GAM Equation for Key Predictor
+
+To examine the association between Risk_Score and fraud, we fit a
+generalized additive model (GAM) using a logit link function. Following
+the general GAM structure:
+
+$$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
+
+our model simplifies to a single predictor:
+
+$$ \text{logit}(\Pr(\text{Fraud} = 1)) = \alpha + s(\text{Risk\_Score}) $$
+
+where alpha = 1.9109 is the intercept, representing the baseline
+log-odds of fraud when Risk_Score is zero. The smooth term Risk_Score
+captures the nonlinear relationship between Risk_Score and fraud
+probability. The effective degrees of freedom for the smooth term is
+approximately 9, allowing flexibility in modeling nonlinear changes. Its
+high significance indicates a strong association with fraud.
