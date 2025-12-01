@@ -21,7 +21,7 @@ editor:
     wrap: 72
 ---
 
-[**Slides**](slides.html){target="_blank"}
+[**Slides**](slides.qmd){target="_blank"}
 
 [**Literature Review**](Literature%20Review.html)
 
@@ -728,11 +728,20 @@ par(mfrow = c(1, 1))
 
 #### **GAM Analysis for Categorical Variables**
 
-*Table 4* presents a GAM using only categorical predictors to examine
-associations with fraud. Each estimate represents the log-odds
-difference relative to the reference category. Standard errors indicate
-uncertainty, and confidence intervals crossing 1 indicate no significant
-difference.
+*Table 4* shows the results of a GAM model using only categorical
+predictors to examine their association with fraud. Each estimate
+represents the change in log-odds of fraud for that category compared to
+the reference category. Standard errors quantify the uncertainty around
+each estimate. The odds ratios (OR) and 95% confidence intervals
+translate the log-odds into a more interpretable scale: an OR of 1
+indicates no effect, while values above or below 1 indicate higher or
+lower fraud odds, respectively.
+
+The p-values indicate whether these differences are statistically
+significant. In this dataset, all p-values are well above 0.05, meaning
+none of the categorical predictors show a significant effect on fraud.
+Confidence intervals for most categories cross 1, reinforcing that these
+variables do not meaningfully influence fraud probability.
 
 ```{r}
 library(mgcv)
