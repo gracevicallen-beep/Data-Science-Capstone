@@ -35,3 +35,12 @@ h2, h3 {
     margin: 0 !important;
     padding: 0 !important;
 }
+/* Make code blocks scrollable horizontally */
+.reveal pre code {
+  max-height: 350px;   /* adjust height to your preference */
+  overflow-y: auto;
+  overflow-x: auto;
+  display: block;
+  padding: 1em;
+  border-radius: 8px;
+}
