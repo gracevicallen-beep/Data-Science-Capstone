@@ -21,9 +21,9 @@ editor:
     wrap: 72
 ---
 
-## Introduction
+# Introduction
 
-**What are generalized additive models?**
+## **What are generalized additive models?**
 
 -   Not your typical straight-line regression — GAMs let patterns curve
     naturally
@@ -39,21 +39,22 @@ editor:
 ## Brief History of GAMs
 
 Generalized Additive Models were introduced in the late 1980s as a way
-to add flexibility to traditional regression models. Trevor Hastie and
-Robert Tibshirani developed the framework to allow each predictor in a
-model to follow its own smooth pattern rather than forcing everything
-into a straight line. Through the 1990s and early 2000s, the approach
-grew in popularity in fields that needed interpretable models, including
-public health, ecology, and social sciences.
+to add flexibility to traditional regression models. @Hastie_1986 and
+@Hastie_Tibshirani_1990 developed the framework to allow each predictor
+in a model to follow its own smooth pattern rather than forcing
+everything into a straight line. Through the 1990s and early 2000s, the
+approach grew in popularity in fields that needed interpretable models,
+including public health, ecology, and social sciences.
 
 ## Brief History of GAMs
 
 A major step forward came with the development of the mgcv package in R,
-created by Simon Wood. His work added modern smoothing techniques,
-automatic penalty selection, and faster computation, making GAMs
-practical for large and noisy datasets. Today, GAMs are widely used in
-finance, fraud detection, risk scoring, and other areas where
-organizations need both predictive accuracy and clear explanations.
+created by Simon Wood [@Wood_2017]. His work added modern smoothing
+techniques, automatic penalty selection, and faster computation, making
+GAMs practical for large and noisy datasets [@Wood_2025]. Today, GAMs
+are widely used in finance, fraud detection, risk scoring, and other
+areas where organizations need both predictive accuracy and clear
+explanations [@DalPozzolo_2014; @DGAM_2021; @GamHP_2020].
 
 ## GAMS in Action: Real World Uses + Our Study
 
@@ -61,9 +62,10 @@ organizations need both predictive accuracy and clear explanations.
 diverse domains:**
 
 -   Financial Analytics: Detecting anomalies and potential fraud in
-    transaction data
+    transaction data [@Brossart_2015]
 
 -   Banking & Insurance: Modeling risk scores in banking and insurance
+    [@Tragouda_2024]
 
 ## GAMS in Action: Real World Uses + Our Study
 
@@ -71,16 +73,16 @@ diverse domains:**
 diverse domains:**
 
 -   Environmental Science: Forecasting trends in environmental and
-    climate research
+    climate research [@Guisan_2002; @Detmer_2025]
 
 -   Public Health: Understanding health outcomes and public health
-    patterns
+    patterns [@White_2020]
 
 ## **Our Project: Study Context: GAMs for Fraud Detection**
 
 -   Toolset: RStudio + package
 
--   Dataset: Kaggle’s Fraud Detection Transactions (Ashar, 2024)
+-   Dataset: Kaggle’s Fraud Detection Transactions [@Ashar_2024]
 
 -   Purpose: Identify predictive variables linked to fraudulent activity
 
@@ -88,11 +90,11 @@ diverse domains:**
 
 ***Here’s how we used GAMs to explore patterns in the fraud dataset.***
 
-## Methods
+# Methods
 
-**GAM Modeling Overview**
+## **GAM Modeling Overview**
 
--   GAMs extend traditional regression
+-   GAMs extend traditional regression [@Hastie_1986]
 
 -   Capture nonlinear predictor-response relationships
 
@@ -108,35 +110,31 @@ diverse domains:**
 
 ## Modeling Workflow Steps
 
-1\. Data Acquisition
+1.  Acquire synthetic Kaggle fraud dataset (50k rows, 21 features)
+2.  Explore distributions and identify skew/outliers
+3.  Clean data and review categorical variables
+4.  Summarize transaction type, device type, and merchant category
+5.  Visualize patterns using histograms and nonlinear trend checks
 
-2\. Data Exploration & Cleaning
+## Modeling Workflow Steps
 
-3\. Categorical Summary
-
-4\. Visualizations
-
-5\. Assumptions
-
-6\. GAM Analysis
-
-7\. GAM Model for predictors
-
-8\. Model Performance
-
-9\. Final Interpretation
+1.  Check assumptions with k-index, QQ plot, and residual diagnostics
+2.  Fit GAM and interpret numeric and categorical smooth effects
+3.  Evaluate performance using confusion matrix, ROC curve, and AUC
+    (0.73)
+4.  Summarize findings and finalize interpretation
 
 ## GAM Equation
 
 $$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
 
--   \(g\) = link function (logit for binary fraud)
+-   \(g\) = link function (logit for binary fraud) [@HalDa_2012]
 
 -   Smooth functions capture nonlinear effects
 
 -   Additive contributions from each predictor
 
--   Balances flexibility + interpretability
+-   Balances flexibility + interpretability [@Hastie_Tibshirani_1990]
 
 ## GAM Assumptions (Fraud Context)
 
@@ -148,11 +146,11 @@ $$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
 
 -   Binomial response distribution
 
--   Independent observations
+-   Independent observations [@Wood_2017]
 
 -   Low predictor multicollinearity
 
--   Penalization prevents overfitting
+-   Penalization prevents overfitting [@Wood_2017]
 
 ## Why We Chose GAMs For Fraud Detection
 
@@ -168,7 +166,7 @@ $$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
 
 -   Strong literature support for fraud analytics
 
--   Scalable through mgcv’s automated smoothing
+-   Scalable through mgcv’s automated smoothing [@Wood_2017]
 
 ## Practical Advantages & Relevance to Real-World Analytics
 
@@ -186,13 +184,13 @@ $$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
 
 -   Aligns with both operational and compliance needs
 
-## Analysis and Results
+# Analysis and Results
 
-**Data Exploration and Visualization**
+# Data Exploration and Visualization
 
-**Dataset Description**
+## **Dataset Description**
 
-**What It Is**
+***What It Is***
 
 -   A synthetic dataset built to mimic real financial transactions
 
@@ -200,21 +198,17 @@ $$ g(\mu) = \alpha + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p) $$
 
 -   Hosted on Kaggle
 
-## Analysis and Results
+## **Dataset Description**
 
-**Data Exploration and Visualization**
-
-**Why We Use It**
+***Why We Use It***
 
 -   Train fraud detection models for binary classification tasks
 
 -   Spot fraud: each transaction labeled as fraud (1) or not fraud (0)
 
-## Analysis and Results
+## **Dataset Description**
 
-**Data Exploration and Visualization**
-
-**What Makes It Special**
+***What Makes It Special***
 
 Realistic fraud patterns:
 
@@ -227,20 +221,18 @@ Realistic fraud patterns:
 -   Large & diverse records: balances normal vs. rare fraud cases →
     addresses class imbalance.
 
-## Data Exploration and Visualization
+## **Dataset Key Characteristics**
 
-**Key Characteristics**
-
-**What's Inside**
+***What's Inside***
 
 -   50,000 Rows: A good amount of data to work with.
 
 -   Two Labels: Every transaction is marked as either: 1 = Fraud 0 = Not
     Fraud
 
-## Data Exploration and Visualization
+## Data Features
 
-**Data Features-- 21 features across three categories:**
+**21 features across three categories:**
 
 -   Numbers: Like transaction amounts, risk scores, account balances.
 
@@ -250,9 +242,7 @@ Realistic fraud patterns:
 -   Time Data: When transactions happened (time, day) and their
     sequence.
 
-## Data Exploration and Visualization
-
-**Label Distribution Class Imbalance:**
+## **Label Distribution Class Imbalance:**
 
 -   Fraudulent transactions are a small percentage, reflecting
     real-world scenarios.
@@ -263,7 +253,9 @@ Realistic fraud patterns:
 -   Modeling flexibility: supports interpretable (GAMs, logistic
     regression) or high-performance (XGBoost) approaches
 
-## Distribution of Variables
+## Dataset Visualizations
+
+**Categorical Distribution**
 
 ```{r}
 # Load libraries
@@ -373,6 +365,49 @@ for (var in numeric_vars) {
 plot_list[[5]]  # Transaction_Amount appears last
 ```
 
+## Card Age
+
+```{r}
+library(tidyverse)
+library(lubridate)
+# Load libraries
+library(ggplot2)
+library(dplyr)
+library(tidyr)    # For pivot_longer
+library(gridExtra) # For arranging plots
+#install.packages("moments") 
+library(moments)   # For skewness and kurtosis
+# Load dataset
+fraud_data <- read.csv("synthetic_fraud_dataset.csv")
+
+# Convert Timestamp to date, calculate Transaction Year and Issuance Year, exclude NAs
+fraud_data <- fraud_data %>%
+  mutate(
+    Timestamp = ymd_hms(Timestamp),               # adjust if format differs
+    Transaction_Year = year(Timestamp),
+    Issuance_Year = Transaction_Year - Card_Age
+  ) %>%
+  filter(!is.na(Issuance_Year), !is.na(Card_Age))  # remove rows with NA
+
+# Bin Issuance Year into 5-year ranges and drop unused NA factor levels
+fraud_data <- fraud_data %>%
+  mutate(
+    Issuance_Year_Bin = cut(Issuance_Year,
+                             breaks = seq(2000, 2025, by = 5),
+                             right = FALSE,
+                             labels = c("2000-2004","2005-2009","2010-2014","2015-2019","2020-2024"))
+  ) %>%
+  filter(!is.na(Issuance_Year_Bin))  # drop any rows that fall outside the bins
+
+# Histogram
+ggplot(fraud_data, aes(x = Issuance_Year_Bin)) +
+  geom_bar(fill = "steelblue", color = "white") +
+  labs(title = "Figure 2. Card Age by Issuance Year Range",
+       x = "Card Issuance Year Range",
+       y = "Count") +
+  theme_light()
+```
+
 ## Non-linearity Check
 
 ```{r}
@@ -392,9 +427,9 @@ ggplot(fraud_data, aes(x = Transaction_Amount, y = Fraud_Label)) +
   theme_light()
 ```
 
-## Modeling and Results
+# Modeling and Results
 
-**Assumptions**
+## **Assumptions**
 
 ![](images/rvf.png){fig-align="center"}
 
@@ -513,3 +548,228 @@ $$ \text{logit}(\Pr(\text{Fraud} = 1)) = \alpha + s(\text{Risk_Score}) $$
 
 where alpha = 1.9109 is the intercept, representing the baseline
 log-odds of fraud when Risk_Score is zero.
+
+## Model Diagnostics and Performance Metrics
+
+```{r}
+##Confusion Matrix
+##Install once: 
+#install.packages(
+#  c("mgcv", "pROC", "caret", "dplyr", "ggplot2", "scales"),
+  repos = "https://cloud.r-project.org"
+#)
+
+library(mgcv)
+library(pROC)
+library(caret)
+library(dplyr)
+library(ggplot2)
+library(scales)
+
+data <- read.csv("synthetic_fraud_dataset.csv", stringsAsFactors = FALSE)
+# 2. Data Preprocessing
+# ------------------------------------------------
+
+# Convert the target variable and categorical predictors to factors
+data$Fraud_Label <- factor(data$Fraud_Label, levels = c(0, 1))
+data$Is_Weekend <- factor(data$Is_Weekend)
+data$Previous_Fraudulent_Activity <- factor(data$Previous_Fraudulent_Activity)
+data$Device_Type <- factor(data$Device_Type)
+data$Card_Type <- factor(data$Card_Type)
+
+# ------------------------------------------------
+# 3. Data Splitting (70% Train, 30% Test)
+# ------------------------------------------------
+
+set.seed(42) # For reproducibility
+train_index <- createDataPartition(data$Fraud_Label, p = 0.7, list = FALSE)
+train_data <- data[train_index, ]
+test_data <- data[-train_index, ]
+
+# ------------------------------------------------
+# 4. GAM Fitting (Logistic Model)
+# ------------------------------------------------
+
+# Use smooth terms (s()) for continuous variables to capture non-linear fraud patterns.
+gam_model <- gam(
+  Fraud_Label ~ s(Transaction_Amount) +
+    s(Account_Balance) +
+    s(Risk_Score) +
+    s(Transaction_Distance) +
+    Avg_Transaction_Amount_7d +
+    Daily_Transaction_Count +
+    Card_Age +
+    Is_Weekend +
+    Previous_Fraudulent_Activity +
+    Device_Type +
+    Card_Type,
+  data = train_data,
+  family = binomial(link = "logit"), # Logistic GAM for binary classification
+  method = "REML"
+)
+
+
+# ------------------------------------------------
+# 5. Prediction and AUC Calculation
+# ------------------------------------------------
+
+test_probabilities <- predict(gam_model, newdata = test_data, type = "response")
+
+# Generate the ROC curve
+roc_obj <- roc(test_data$Fraud_Label, test_probabilities)
+auc_value <- auc(roc_obj)
+
+
+# ------------------------------------------------
+# 6. Confusion Matrix and Balanced Accuracy
+# ------------------------------------------------
+
+# Convert probabilities to classes (using 0.5 threshold)
+predicted_classes <- factor(ifelse(test_probabilities > 0.5, 1, 0), levels = c(0, 1))
+cm <- confusionMatrix(predicted_classes, test_data$Fraud_Label, positive = "1")
+balanced_accuracy <- cm$byClass["Balanced Accuracy"]
+
+# Prepare data for plotting
+cm_table <- as.data.frame(cm$table)
+names(cm_table) <- c("Pred", "Ref", "Freq")
+
+cm_table <- cm_table %>%
+  group_by(Ref) %>%
+  mutate(Pct = Freq/sum(Freq)*100, Label = paste0(Freq, "\n(", round(Pct,1), "%)"))
+
+# Create the heatmap plot
+p_cm <- ggplot(cm_table, aes(x = Ref, y = Pred, fill = Freq)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = Label), color = "white", size = 6, fontface = "bold") +
+  scale_fill_gradient(low = "#2c7bb6", high = "#d7191c") +
+  labs(title = "Figure 13. Confusion Matrix", x = "Actual (Reference)", y = "Predicted") +
+  theme_minimal() +
+  coord_fixed()
+print(p_cm)
+```
+
+## Model Diagnostics and Performance Metrics
+
+```{r}
+# Install once: 
+#install.packages(c("mgcv","pROC","caret","dplyr","ggplot2","scales"))
+
+library(mgcv)
+library(pROC)
+library(caret)
+library(dplyr)
+library(ggplot2)
+library(scales)
+
+## ROC Curve 
+
+# Load the dataset
+df <- read.csv("synthetic_fraud_dataset.csv", stringsAsFactors = FALSE)
+
+# ------------------------------------------------
+# 2. Data Preprocessing and Splitting
+# ------------------------------------------------
+df <- df %>%
+  mutate(
+    across(c(Transaction_Type, Device_Type, Location, Merchant_Category,
+             Card_Type, Authentication_Method, IP_Address_Flag,
+             Previous_Fraudulent_Activity, Is_Weekend), factor),
+    Fraud_Label = factor(Fraud_Label, levels = c(0,1))
+  )
+
+set.seed(123)
+train_idx <- createDataPartition(df$Fraud_Label, p = .70, list = FALSE)
+train <- df[train_idx, ]
+test  <- df[-train_idx, ]
+
+# ------------------------------------------------
+# 3. Fit Simple GAM (Focusing on Key Predictors)
+# ------------------------------------------------
+gam_mod <- gam(
+  Fraud_Label ~
+    s(Risk_Score, k = 10) +                  
+    s(Transaction_Amount, k = 10) +
+    s(Transaction_Distance, k = 10) +
+    Previous_Fraudulent_Activity +
+    Device_Type +
+    Card_Type +
+    Is_Weekend,
+  family = binomial, 
+  data = train,
+  method = "REML",
+  select = TRUE       
+)
+
+# ------------------------------------------------
+# 4. Prediction and ROC/AUC Calculation
+# ------------------------------------------------
+test_prob <- predict(gam_mod, test, type = "response")
+roc_obj <- roc(test$Fraud_Label, test_prob)
+auc_val <- auc(roc_obj)
+
+# ------------------------------------------------
+# 5. ROC Curve Generation (Should now save to your setwd() folder)
+# ------------------------------------------------
+
+# Prepare data for ggplot2 plotting
+roc_df <- data.frame(fpr = 1 - roc_obj$specificities, tpr = roc_obj$sensitivities)
+
+# Create the ggplot2 visualization
+p_roc <- ggplot(roc_df, aes(x = fpr, y = tpr)) +
+  geom_ribbon(aes(ymin = 0, ymax = tpr), fill = "#2c7bb6", alpha = 0.2) +
+  geom_line(color = "#2c7bb6", linewidth = 1.5) +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "gray") +
+  labs(title = "Figure 14. ROC Curve", 
+       subtitle = paste("GAM Model AUC =", round(auc_val, 4)),
+       x = "False Positive Rate (1 - Specificity)", 
+       y = "True Positive Rate (Sensitivity)") +
+  theme_minimal(base_size = 14) +
+  coord_fixed() +
+  scale_x_continuous(labels = scales::percent, breaks = seq(0,1,0.2)) +
+  scale_y_continuous(labels = scales::percent, breaks = seq(0,1,0.2))
+
+print(p_roc)
+```
+
+# Conclusion
+
+## **Key Findings & Model Performance**
+
+*What We Found:*
+
+-   Risk Score: Strongest predictor — fraud probability spikes near 0.75
+
+-   Transaction Amount: Moderate effect — larger transactions more
+    likely to be fraudulent
+
+## Model Performance
+
+-   True Positives: 2,318
+
+-   True Negatives: 10,102
+
+-   False Positives: 77
+
+-   False Negatives: 2,502
+
+-   AUC (ROC Curve): 0.73 — good discriminative ability
+
+## Limitations 
+
+-   Synthetic dataset limits real-world generalizability
+
+-   Class imbalance affects recall for rare fraud case
+
+-   More complex models may improve accuracy
+
+## Insights & Next Steps
+
+-   Combine GAMs with other ML methods
+
+-   Test on real-time or streaming data
+
+-   Refine thresholds for cost-sensitive decisions
+
+# QUESTIONS?
+
+## References
