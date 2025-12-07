@@ -2,7 +2,7 @@
 title: "Generalized Additive Models in Fraud Detection"
 subtitle: "Data Science Capstone Project"
 author: "Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou"
-date: "November 21, 2025"
+date: "December 10, 2025"
 format:
   revealjs:
     code-fold: true
@@ -39,12 +39,12 @@ editor:
 ## Brief History of GAMs
 
 Generalized Additive Models were introduced in the late 1980s as a way
-to add flexibility to traditional regression models. @Hastie_1986 and
-@Hastie_Tibshirani_1990 developed the framework to allow each predictor
-in a model to follow its own smooth pattern rather than forcing
-everything into a straight line. Through the 1990s and early 2000s, the
-approach grew in popularity in fields that needed interpretable models,
-including public health, ecology, and social sciences.
+to add flexibility to traditional regression models. @Hastie_1986
+developed the framework to allow each predictor in a model to follow its
+own smooth pattern rather than forcing everything into a straight line.
+Through the 1990s and early 2000s, the approach grew in popularity in
+fields that needed interpretable models, including public health,
+ecology, and social sciences.
 
 ## Brief History of GAMs
 
@@ -242,7 +242,7 @@ Realistic fraud patterns:
 -   Time Data: When transactions happened (time, day) and their
     sequence.
 
-## **Label Distribution Class Imbalance:**
+## **Label Distribution Class Imbalance**
 
 -   Fraudulent transactions are a small percentage, reflecting
     real-world scenarios.
@@ -528,7 +528,7 @@ ggplot(fraud_data, aes(x = Risk_Score, y = predicted_prob)) +
     )
   ) +
   labs(
-    title = "Figure 12. Fraud Probability vs. Risk Score",
+    title = "Figure 10. Fraud Probability vs. Risk Score",
     x = "Risk Score",
     y = "Predicted Probability of Fraud"
   ) +
@@ -642,7 +642,7 @@ p_cm <- ggplot(cm_table, aes(x = Ref, y = Pred, fill = Freq)) +
   geom_tile(color = "white") +
   geom_text(aes(label = Label), color = "white", size = 6, fontface = "bold") +
   scale_fill_gradient(low = "#2c7bb6", high = "#d7191c") +
-  labs(title = "Figure 13. Confusion Matrix", x = "Actual (Reference)", y = "Predicted") +
+  labs(title = "Figure 11. Confusion Matrix", x = "Actual (Reference)", y = "Predicted") +
   theme_minimal() +
   coord_fixed()
 print(p_cm)
@@ -719,7 +719,7 @@ p_roc <- ggplot(roc_df, aes(x = fpr, y = tpr)) +
   geom_ribbon(aes(ymin = 0, ymax = tpr), fill = "#2c7bb6", alpha = 0.2) +
   geom_line(color = "#2c7bb6", linewidth = 1.5) +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "gray") +
-  labs(title = "Figure 14. ROC Curve", 
+  labs(title = "Figure 12. ROC Curve", 
        subtitle = paste("GAM Model AUC =", round(auc_val, 4)),
        x = "False Positive Rate (1 - Specificity)", 
        y = "True Positive Rate (Sensitivity)") +
@@ -754,7 +754,7 @@ print(p_roc)
 
 -   AUC (ROC Curve): 0.73 — good discriminative ability
 
-## Limitations 
+## Limitations
 
 -   Synthetic dataset limits real-world generalizability
 
