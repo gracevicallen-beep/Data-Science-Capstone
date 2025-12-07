@@ -2,7 +2,7 @@
 title: "Generalized Additive Models in Fraud Detection"
 subtitle: "Data Science Capstone Project"
 author: "Grace Allen, Kesi Allen, Sonya Melton, Pingping Zhou"
-date: "November 21, 2025"
+date: "December 10, 2025"
 format: 
   html:
     code-fold: true       # Allows folding of code chunks
@@ -259,7 +259,7 @@ GAMs extend Generalized Linear Models (GLMs) by relaxing strict
 linearity assumptions and incorporating additive smooth functions. This
 flexibility allows the model to adapt to complex real-world data without
 losing interpretability [@Wood_2025]. Modern implementations in R, such
-as `mgcv`, offer automatic smoothness estimation and robust fitting
+as mgcv, offer automatic smoothness estimation and robust fitting
 through Generalized Cross-Validation [@Wood_2025], making GAMs scalable
 to large datasets [@Ashar_2024].
 
@@ -564,6 +564,27 @@ ggplot(fraud_data, aes(x = Transaction_Amount, y = Fraud_Label)) +
   theme_light()
 ```
 
+*Figure 4* shows the outcome variable Fraud_Label shows a moderate class
+imbalance, with 67.87% non-fraud cases and 32.13% fraud cases. Although
+the imbalance is noticeable, it is not severe enough to require
+resampling or other corrective techniques prior to modeling. We will
+assess model performance using metrics that are less sensitive to class
+imbalance, AUC and the confusion matrix, rather than relying on accuracy
+alone.
+
+```{r}
+fraud_data <- read.csv("synthetic_fraud_dataset.csv")
+
+library(dplyr)
+library(knitr)
+
+fraud_data %>%
+  count(Fraud_Label) %>%
+  mutate(Percent = round(n / sum(n) * 100, 2)) %>%
+  rename(Count = n) %>%
+  kable(caption = "Figure 4. Breakdown of Fraud_Label")
+```
+
 ### **Modeling and Results**
 
 The modeling process uses a logistic binomial Generalized Additive Model
@@ -615,6 +636,8 @@ behavior aligns with model assumptions, and there is no evidence of
 problematic dependence among predictors. These results suggest that the
 model is stable and reliable for interpreting how transaction-related
 features relate to fraud probability.
+
+*Figures 5, 6, 7*
 
 ```{r}
 
@@ -683,7 +706,7 @@ invisible(NULL)
 
 #### **GAM Analysis for Numeric Variables**
 
-The smooth term analysis in *Figure 10.* establishes a hierarchy for
+The smooth term analysis in *Figure 8* establishes a hierarchy for
 predicting fraud. Risk_Score is the dominant predictor, showing a sharp
 increase in fraud probability once it exceeds 0.75 on the log-odds
 scale. Transaction_Amount is a secondary predictor, displaying a
@@ -693,7 +716,7 @@ with flat smooth terms near zero. Fraud detection efforts should focus
 on high Risk_Score transactions and large amounts, while account balance
 and card age are less informative.
 
-*Figure 10.*
+*Figure 8.*
 
 ```{r}
 #install.packages("caret")
@@ -789,11 +812,10 @@ tidy_gam_cat %>%
 ```
 
 To visualize the associations between categorical variables and fraud,
-*Figure 11* shows a coefficient plot displaying the estimated odds
-ratios from the GAM. In this plot, each dot represents the estimated
-odds of fraud for a specific category level relative to the reference
-level, while the vertical lines (whiskers) show the 95% confidence
-intervals.
+*Figure 9* shows a coefficient plot displaying the estimated odds ratios
+from the GAM. In this plot, each dot represents the estimated odds of
+fraud for a specific category level relative to the reference level,
+while the vertical lines (whiskers) show the 95% confidence intervals.
 
 If a whisker crosses the line at 1, the effect is not statistically
 significant, meaning there is no clear difference in fraud odds compared
@@ -828,7 +850,7 @@ ggplot(tidy_cat, aes(x = reorder(term, OR), y = OR)) +
   geom_errorbar(aes(ymin = OR_low, ymax = OR_high), width = 0.2) +
   coord_flip() +
   labs(
-    title = "Figure 11. Categorical Variables and Fraud",
+    title = "Figure 9. Categorical Variables and Fraud",
     x = "Category Level (Relative to Reference)",
     y = "Odds Ratio (Logistic GAM)"
   ) +
@@ -880,7 +902,7 @@ risk_gam <- gam(Fraud_Label ~ s(Risk_Score),
 gam_summary <- tidy(risk_gam, parametric = TRUE)
 
 # Display nice summaries
-knitr::kable(gam_summary, caption = "Parametric Terms in GAM Model")
+knitr::kable(gam_summary, caption = "Table 5. Parametric Terms in GAM Model")
 ```
 
 *Note: The intercept represents the baseline log-odds of fraud in the
@@ -911,7 +933,7 @@ smooth_summary <- tidy(risk_gam, parametric = FALSE)
 
 # Display nice summaries
 
-knitr::kable(smooth_summary, caption = "Smooth Terms in GAM Model")
+knitr::kable(smooth_summary, caption = "Table 6. Smooth Terms in GAM Model")
 ```
 
 *Note: The smooth term has \~9 effective degrees of freedom, allowing
@@ -921,7 +943,7 @@ fraud.*
 
 **Risk Score GAM Curve**
 
-*Figure 12* is a generalized additive model (GAM) used to examine how
+*Figure 10* is a generalized additive model (GAM) used to examine how
 Risk_Score influences the probability of fraud. The parametric term
 (intercept) represents the baseline fraud probability when Risk_Score is
 zero, which is approximately 87% in this dataset, and is statistically
@@ -967,7 +989,7 @@ ggplot(fraud_data, aes(x = Risk_Score, y = predicted_prob)) +
     )
   ) +
   labs(
-    title = "Figure 12. Fraud Probability vs. Risk Score",
+    title = "Figure 10. Fraud Probability vs. Risk Score",
     x = "Risk Score",
     y = "Predicted Probability of Fraud"
   ) +
@@ -979,7 +1001,7 @@ ggplot(fraud_data, aes(x = Risk_Score, y = predicted_prob)) +
 
 #### **Confusion Matrix**
 
-*Figure 13* shows the confusion matrix for the GAM Fraud Detector,
+*Figure 11* shows the confusion matrix for the GAM Fraud Detector,
 providing a detailed snapshot of the model’s classification performance
 at a threshold of 0.5. In this matrix, the rows represent the model’s
 predicted labels and the columns represent the actual outcomes, with 0
@@ -1076,7 +1098,7 @@ p_cm <- ggplot(cm_table, aes(x = Ref, y = Pred, fill = Freq)) +
   geom_tile(color = "white") +
   geom_text(aes(label = Label), color = "white", size = 6, fontface = "bold") +
   scale_fill_gradient(low = "#2c7bb6", high = "#d7191c") +
-  labs(title = "Figure 13. Confusion Matrix", x = "Actual (Reference)", y = "Predicted") +
+  labs(title = "Figure 11. Confusion Matrix", x = "Actual (Reference)", y = "Predicted") +
   theme_minimal() +
   coord_fixed()
 print(p_cm)
@@ -1112,7 +1134,7 @@ reliability of the model’s predictions.*
 
 #### **ROC Curve**
 
-*Figure 14* shows the ROC Curve for the GAM Fraud Detector, which
+*Figure 12* shows the ROC Curve for the GAM Fraud Detector, which
 provides a comprehensive view of the model’s classification performance
 across all possible threshold values. The curve plots the True Positive
 Rate (Sensitivity) against the False Positive Rate (1 - Specificity),
@@ -1204,7 +1226,7 @@ p_roc <- ggplot(roc_df, aes(x = fpr, y = tpr)) +
   geom_ribbon(aes(ymin = 0, ymax = tpr), fill = "#2c7bb6", alpha = 0.2) +
   geom_line(color = "#2c7bb6", linewidth = 1.5) +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "gray") +
-  labs(title = "Figure 14. ROC Curve", 
+  labs(title = "Figure 12. ROC Curve", 
        subtitle = paste("GAM Model AUC =", round(auc_val, 4)),
        x = "False Positive Rate (1 - Specificity)", 
        y = "True Positive Rate (Sensitivity)") +
@@ -1221,11 +1243,10 @@ print(p_roc)
 The GAM demonstrated solid classification performance. Key findings
 include:
 
--   **Risk_Score** – the dominant predictor, with fraud probability
-    sharply increasing around a score of 0.75, showing a clear threshold
-    effect.
+-   Risk_Score – the dominant predictor, with fraud probability sharply
+    increasing around a score of 0.75, showing a clear threshold effect.
 
--   **Transaction_Amount** – shows a moderate positive effect on fraud
+-   Transaction_Amount – shows a moderate positive effect on fraud
     probability, with larger transactions more likely to be fraudulent.
 
 Model performance metrics support these findings. Out of the test
@@ -1239,9 +1260,13 @@ flagged (false positives), and 2,502 fraudulent transactions were missed
 Several limitations were noted. The dataset is synthetic and evenly
 distributed, which reduced the availability of strong predictors. GAMs
 are sensitive to class imbalance, which may affect recall for rare fraud
-cases. While GAMs are interpretable, more complex machine learning
-methods such as gradient boosting could achieve higher predictive
-accuracy.
+cases; however, the imbalance in our dataset is not extreme, so
+evaluation metrics (including AUC and the confusion matrix) should still
+provide an accurate assessment of performance. Real-world fraud datasets
+would likely have a greater imbalance and would therefore need to
+account for it. Additionally, while GAMs are interpretable, more complex
+machine learning methods such as gradient boosting could achieve higher
+predictive a
 
 Despite these limitations, the GAM effectively identified which
 transaction characteristics are related to fraud, providing insights
